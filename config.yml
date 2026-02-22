@@ -1,0 +1,23 @@
+# Hoval CAN-Bus Prometheus Exporter — Configuration
+# All values shown are defaults. Adjust as needed.
+
+# CAN bus settings
+can_interface: "can0"
+can_bitrate: 50000          # Hoval TTE uses 50 kbit/s (not standard 500k!)
+
+# Polling
+poll_interval: 30           # seconds between full poll cycles
+poll_delay: 0.1             # seconds between individual GET requests
+dry_run: false              # true = passive listen only, no poll requests
+
+# WEZ addressing — must use gateway device type for TTE-WEZ to respond
+wez_device_type: 8          # 0x08 = Gateway device type (NOT 1!)
+wez_device_id: 1            # Device ID (usually 1 unless multiple WEZ)
+poll_priority: 228          # 0xE4 = Gateway priority
+poll_message_id: 6          # msg_id = 6 (Gateway uses 5, avoid collision)
+
+# Prometheus
+metrics_port: 9101          # HTTP port for /metrics endpoint
+
+# Logging
+log_level: "INFO"           # DEBUG, INFO, WARNING, ERROR

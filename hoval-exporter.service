@@ -1,0 +1,33 @@
+[Unit]
+Description=Hoval CAN-Bus Prometheus Exporter
+After=can0.service network.target
+Requires=can0.service
+
+# Restart limits: max 5 restarts in 5 minutes
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=root
+# Adjust paths to match your installation
+WorkingDirectory=/opt/hoval-exporter
+ExecStart=/opt/hoval-exporter/venv/bin/python3 \
+    /opt/hoval-exporter/hoval-exporter.py \
+    --config /opt/hoval-exporter/config.yml
+Restart=on-failure
+RestartSec=10
+
+# Hardening
+NoNewPrivileges=yes
+ProtectSystem=strict
+ReadWritePaths=/opt/hoval-exporter
+ProtectHome=yes
+PrivateTmp=yes
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=hoval-exporter
+
+[Install]
+WantedBy=multi-user.target

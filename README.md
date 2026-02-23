@@ -19,25 +19,11 @@ using the TopTronic E controller family — datapoint IDs may vary.
 
 ## Architecture
 
-```
-┌──────────────────┐     CAN-Bus      ┌──────────────────────┐
-│ Hoval heat pump  │◄────50 kbit/s────►│ Linux host           │
-│ (TTE-WEZ)        │                   │                      │
-│                  │                   │ ┌──────────────────┐ │
-│  CAN H / L / GND├───────────────────►│ │ CAN adapter      │ │
-└──────────────────┘                   │ │ (SocketCAN)      │ │
-                                       │ └────────┬─────────┘ │
-                                       │          │            │
-                                       │ ┌────────▼─────────┐ │
-                                       │ │ hoval-exporter.py│ │
-                                       │ │  :9101/metrics   │ │
-                                       │ └────────┬─────────┘ │
-                                       │          │ scrape     │
-                                       │ ┌────────▼─────────┐ │
-                                       │ │ Prometheus /     │ │
-                                       │ │ VictoriaMetrics  │ │
-                                       │ └──────────────────┘ │
-                                       └──────────────────────┘
+```mermaid
+graph TD
+    HP["Hoval heat pump<br/>(TTE-WEZ)<br/>CAN H / L / GND"] <-->|"CAN-Bus<br/>50 kbit/s"| CA["CAN adapter<br/>(SocketCAN)"]
+    CA --> EX["hoval-exporter.py<br/>:9101/metrics"]
+    EX -->|scrape| VM["Prometheus /<br/>VictoriaMetrics"]
 ```
 
 ## Quick start
@@ -90,7 +76,7 @@ Create a dedicated system user with CAN bus access:
 
 ```bash
 sudo useradd -r -s /usr/sbin/nologin -d /opt/hoval-exporter hoval
-sudo groupadd -f can
+sudo groupadd -r -f can
 sudo usermod -aG can hoval
 
 # Allow 'can' group to manage SocketCAN interfaces
@@ -131,24 +117,26 @@ poll_message_id: 6      # msg_id = 6 (Gateway uses 5)
 
 ### Arbitration ID (29-bit extended CAN)
 
-```
-Bit:  28..24   23..16    15..8     7..0
-      ├────────┼────────┼────────┼────────┤
-      │msg_id  │priority│dev_type│dev_id  │
-      │ (5bit) │ (8bit) │ (8bit) │ (8bit) │
-      └────────┴────────┴────────┴────────┘
+```mermaid
+packet-beta
+  0-4: "msg_id (5bit)"
+  5-12: "priority (8bit)"
+  13-20: "dev_type (8bit)"
+  21-28: "dev_id (8bit)"
 ```
 
 Broadcast address: `dev_type=0x0F, dev_id=0xFF` → `0x0FFF`
 
 ### Payload format
 
-```
-Byte:  0          1           2              3               4..5            6..7
-       ├──────────┼───────────┼──────────────┼───────────────┼───────────────┼──────────┤
-       │msg_len   │operation  │function_group│function_number│datapoint_id   │data      │
-       │          │(8bit)     │(8bit)        │(8bit)         │(16bit BE)     │(0-2 byte)│
-       └──────────┴───────────┴──────────────┴───────────────┴───────────────┴──────────┘
+```mermaid
+packet-beta
+  0-7: "msg_len"
+  8-15: "operation (8bit)"
+  16-23: "function_group (8bit)"
+  24-31: "function_number (8bit)"
+  32-47: "datapoint_id (16bit BE)"
+  48-63: "data (0-2 byte)"
 ```
 
 | Operation | Value  | Direction        |

@@ -62,7 +62,7 @@ BROADCAST_ADDR = 0x0FFF  # device_type=0x0F, device_id=0xFF
 MULTIFRAME_START = 0x1F400FFF  # Start frame: [flags][seq][op][fg][fn][dp_hi][dp_lo][data_0]
 MULTIFRAME_CONT  = 0x1E800FFF  # Continuation:  [seq][data_1][data_2][data_3][crc_hi][crc_lo]
 
-VERSION = "1.3.0"
+VERSION = "1.4.0"
 
 
 # ---------------------------------------------------------------------------
@@ -133,21 +133,31 @@ DEFAULT_DATAPOINTS = [
     DatapointDef("thermal_energy",         10,  1, 29050, "U32", 3, "mwh",    "Total thermal heating energy", poll=False),
 
     # Additional datapoints discovered on bus (from Gateway polling)
-    DatapointDef("flow_setpoint_hc1",       1,  0,  1002, "S16", 1, "celsius", "Flow setpoint heating circuit 1"),
-    DatapointDef("operating_mode_hc1",      1,  0,  3050, "U8",  0, "status",  "Operating mode heating circuit 1"),
+    DatapointDef("mixed_flow_temp_hc1",  1,  0,     0, "S16", 1, "celsius", "Mixed flow temperature heating circuit 1"),
+    DatapointDef("flow_setpoint_hc1",    1,  0,  1002, "S16", 1, "celsius", "Flow setpoint heating circuit 1"),
+    DatapointDef("operating_mode_hc1",   1,  0,  3050, "U8",  0, "status",  "Operating mode heating circuit 1"),
     DatapointDef("eco_room_setpoint_hc1",   1,  0,  3053, "S16", 1, "celsius", "Eco room setpoint heating circuit 1"),
     DatapointDef("comfort_room_setpoint_hc1", 1, 0, 3051, "S16", 1, "celsius", "Comfort room setpoint heating circuit 1"),
     DatapointDef("cooling_room_setpoint_hc1", 1, 0, 3054, "S16", 1, "celsius", "Cooling room setpoint heating circuit 1"),
     DatapointDef("flow_setpoint_const_hc1", 1,  0,  7036, "S16", 1, "celsius", "Flow setpoint constant mode heating circuit 1"),
-    DatapointDef("operating_mode_dhw",      2,  0,  5050, "U8",  0, "status",  "Operating mode domestic hot water"),
-    DatapointDef("comfort_dhw_setpoint",    2,  0,  5051, "S16", 1, "celsius", "Comfort hot water setpoint"),
-    DatapointDef("eco_dhw_setpoint",        2,  0,  5086, "U8",  0, "celsius", "Eco hot water setpoint"),
-    DatapointDef("flow_setpoint_hp",       10,  1,  1007, "S16", 1, "celsius", "Flow setpoint heat producer"),
-    DatapointDef("operating_status_hp",    10,  1, 20051, "U8",  0, "status",  "Heat producer operating status"),
-    DatapointDef("compressor_starts",      10,  1,  2053, "U8",  0, "count",   "Compressor starts"),
-    DatapointDef("fa_flow_setpoint",       60,254,    16, "S16", 1, "celsius", "Function automation flow setpoint"),
-    DatapointDef("fa_defrost_demand",      60,254,    22, "S16", 1, "celsius", "Function automation defrost demand / evaporator"),
-    DatapointDef("fa_status",              60,254,    34, "U8",  0, "status",  "Function automation status"),
+    DatapointDef("error_hc1",            1,  0,   500, "U8",  0, "status",  "Error register heating circuit 1 (0xFF=ok)"),
+    DatapointDef("dhw_storage_bottom",   2,  0,     6, "S16", 1, "celsius", "Domestic hot water storage bottom sensor"),
+    DatapointDef("error_dhw",            2,  0,   500, "U8",  0, "status",  "Error register domestic hot water (0xFF=ok)"),
+    DatapointDef("operating_mode_dhw",   2,  0,  5050, "U8",  0, "status",  "Operating mode domestic hot water"),
+    DatapointDef("comfort_dhw_setpoint", 2,  0,  5051, "S16", 1, "celsius", "Comfort hot water setpoint"),
+    DatapointDef("eco_dhw_setpoint",     2,  0,  5086, "U8",  0, "celsius", "Eco hot water setpoint"),
+    DatapointDef("flow_temp_hp",        10,  1,     7, "S16", 1, "celsius", "Flow temperature heat producer"),
+    DatapointDef("flow_setpoint_hp",    10,  1,  1007, "S16", 1, "celsius", "Flow setpoint heat producer"),
+    DatapointDef("operating_status_hp", 10,  1, 20051, "U8",  0, "status",  "Heat producer operating status"),
+    DatapointDef("compressor_starts",   10,  1,  2053, "U8",  0, "count",   "Compressor starts"),
+    DatapointDef("condenser_temp",      10,  1, 21028, "S16", 1, "celsius", "Condenser temperature"),
+    DatapointDef("evaporator_temp",     10,  1, 21029, "S16", 1, "celsius", "Evaporator temperature"),
+    DatapointDef("suction_gas_temp",    10,  1, 21030, "S16", 1, "celsius", "Suction gas temperature"),
+    DatapointDef("fan_speed",           10,  1, 23002, "S16", 0, "rpm",     "Outdoor unit fan speed"),
+    DatapointDef("fan_power",           10,  1, 23003, "S16", 0, "status",  "Outdoor unit fan power/stage"),
+    DatapointDef("fa_flow_setpoint",    60,254,    16, "S16", 1, "celsius", "Function automation flow setpoint"),
+    DatapointDef("fa_defrost_demand",   60,254,    22, "S16", 1, "celsius", "Function automation defrost demand / evaporator"),
+    DatapointDef("fa_status",           60,254,    34, "U8",  0, "status",  "Function automation status"),
 ]
 
 
@@ -184,6 +194,7 @@ class Config:
     poll_interval: int = 30         # seconds between poll cycles
     poll_delay: float = 0.1         # seconds between individual requests
     metrics_port: int = 9101
+    metrics_bind: str = "127.0.0.1"     # bind address for metrics HTTP server
     log_level: str = "INFO"
     dry_run: bool = False           # listen only, don't send requests
 
@@ -550,6 +561,8 @@ def parse_args():
                         help="Override log level")
     parser.add_argument("--port", type=int, default=None,
                         help="Override metrics port")
+    parser.add_argument("--bind", type=str, default=None,
+                        help="Override metrics bind address (default: 127.0.0.1)")
     return parser.parse_args()
 
 
@@ -571,6 +584,8 @@ def main():
         cfg.log_level = args.log_level
     if args.port:
         cfg.metrics_port = args.port
+    if args.bind:
+        cfg.metrics_bind = args.bind
 
     # Setup logging
     logging.basicConfig(
@@ -585,7 +600,7 @@ def main():
 
     logging.info("Hoval CAN-Bus Prometheus Exporter v%s", VERSION)
     logging.info("CAN: %s @ %d bit/s", cfg.can_interface, cfg.can_bitrate)
-    logging.info("Metrics: http://0.0.0.0:%d/metrics", cfg.metrics_port)
+    logging.info("Metrics: http://%s:%d/metrics", cfg.metrics_bind, cfg.metrics_port)
     logging.info("Poll interval: %ds, dry_run: %s", cfg.poll_interval, cfg.dry_run)
 
     # Build datapoint registry
@@ -599,7 +614,7 @@ def main():
     ).set(1)
 
     # Start Prometheus HTTP server
-    start_http_server(cfg.metrics_port)
+    start_http_server(cfg.metrics_port, addr=cfg.metrics_bind)
 
     # Open CAN bus
     try:

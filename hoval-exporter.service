@@ -9,7 +9,8 @@ StartLimitBurst=5
 
 [Service]
 Type=simple
-User=root
+User=hoval
+Group=hoval
 # Adjust paths to match your installation
 WorkingDirectory=/opt/hoval-exporter
 ExecStart=/opt/hoval-exporter/venv/bin/python3 \
@@ -17,6 +18,12 @@ ExecStart=/opt/hoval-exporter/venv/bin/python3 \
     --config /opt/hoval-exporter/config.yml
 Restart=on-failure
 RestartSec=10
+
+# CAN bus access requires can group membership
+SupplementaryGroups=can
+
+# Force line-buffered stdout for journal
+Environment=PYTHONUNBUFFERED=1
 
 # Hardening
 NoNewPrivileges=yes

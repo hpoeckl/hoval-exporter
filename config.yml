@@ -18,6 +18,7 @@ poll_message_id: 6          # msg_id = 6 (Gateway uses 5, avoid collision)
 
 # Prometheus
 metrics_port: 9101          # HTTP port for /metrics endpoint
+metrics_bind: "127.0.0.1"  # Bind address (use 0.0.0.0 for remote access)
 
 # Logging
 log_level: "INFO"           # DEBUG, INFO, WARNING, ERROR

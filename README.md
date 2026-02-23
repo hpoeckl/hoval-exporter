@@ -8,13 +8,13 @@ using the TopTronic E controller family — datapoint IDs may vary.
 
 ## Features
 
-- Active polling of 37 datapoints (temperatures, setpoints, status, power)
+- Active polling of 47 datapoints (temperatures, setpoints, status, power, errors)
 - Passive decoding of multi-frame U32 responses (operating hours, thermal energy)
 - Own CAN address (`msg_id=6`) to avoid collisions with the Hoval Gateway
 - Sentinel value filtering (0x8000 / 0xFFFF = no sensor)
 - Prometheus metrics on configurable HTTP port
 - YAML configuration with CLI overrides
-- Systemd service with hardening
+- Systemd service with hardening (dedicated user, no root)
 - Dry-run mode (listen only, no poll requests)
 
 ## Architecture
@@ -86,8 +86,24 @@ curl -s http://localhost:9101/metrics | grep "^hoval_" | sort
 
 ### Systemd service
 
+Create a dedicated system user with CAN bus access:
+
 ```bash
-# Edit hoval-exporter.service to match your paths, then:
+sudo useradd -r -s /usr/sbin/nologin -d /opt/hoval-exporter hoval
+sudo groupadd -f can
+sudo usermod -aG can hoval
+
+# Allow 'can' group to manage SocketCAN interfaces
+echo 'SUBSYSTEM=="net", KERNEL=="can*", GROUP="can", MODE="0660"' | \
+    sudo tee /etc/udev/rules.d/90-can.rules
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+```
+
+Install the service:
+
+```bash
+# Adjust paths in hoval-exporter.service to match your installation
 sudo cp hoval-exporter.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable --now hoval-exporter.service
@@ -198,17 +214,23 @@ U32 value = [data_0, data_1, data_2, data_3] big-endian
 
 ### Temperatures
 
-| Metric name                | fg  | fn  | dp_id | Type | Dec | Unit | Description                      |
-|----------------------------|-----|-----|-------|------|-----|------|----------------------------------|
-| `hoval_outdoor_temp_af1`   | 0   | 0   | 0     | S16  | 1   | °C   | Outdoor sensor 1 (AF1)           |
-| `hoval_outdoor_temp_af2`   | 0   | 0   | 21100 | S16  | 1   | °C   | Outdoor sensor 2 (AF2)           |
-| `hoval_flow_temp_hc1`      | 1   | 0   | 2     | S16  | 1   | °C   | Flow temperature HC1             |
-| `hoval_flow_temp_hc2`      | 1   | 1   | 2     | S16  | 1   | °C   | Flow temperature HC2             |
-| `hoval_flow_temp_hc3`      | 1   | 2   | 2     | S16  | 1   | °C   | Flow temperature HC3             |
-| `hoval_dhw_temp`            | 2   | 0   | 4     | S16  | 1   | °C   | Domestic hot water temperature   |
-| `hoval_return_temp`         | 60  | 254 | 29    | S16  | 1   | °C   | Return temperature               |
-| `hoval_return_temp_hp`      | 10  | 1   | 8     | S16  | 1   | °C   | Return temperature heat producer |
-| `hoval_hp_temp`             | 60  | 254 | 17    | S16  | 1   | °C   | Heat producer temperature        |
+| Metric name                  | fg  | fn  | dp_id | Type | Dec | Unit | Description                      |
+|------------------------------|-----|-----|-------|------|-----|------|----------------------------------|
+| `hoval_outdoor_temp_af1`     | 0   | 0   | 0     | S16  | 1   | °C   | Outdoor sensor 1 (AF1)           |
+| `hoval_outdoor_temp_af2`     | 0   | 0   | 21100 | S16  | 1   | °C   | Outdoor sensor 2 (AF2)           |
+| `hoval_mixed_flow_temp_hc1`  | 1   | 0   | 0     | S16  | 1   | °C   | Mixed flow temperature HC1       |
+| `hoval_flow_temp_hc1`        | 1   | 0   | 2     | S16  | 1   | °C   | Flow temperature HC1             |
+| `hoval_flow_temp_hc2`        | 1   | 1   | 2     | S16  | 1   | °C   | Flow temperature HC2             |
+| `hoval_flow_temp_hc3`        | 1   | 2   | 2     | S16  | 1   | °C   | Flow temperature HC3             |
+| `hoval_dhw_temp`              | 2   | 0   | 4     | S16  | 1   | °C   | Domestic hot water temperature   |
+| `hoval_dhw_storage_bottom`    | 2   | 0   | 6     | S16  | 1   | °C   | DHW storage bottom sensor        |
+| `hoval_return_temp`           | 60  | 254 | 29    | S16  | 1   | °C   | Return temperature               |
+| `hoval_return_temp_hp`        | 10  | 1   | 8     | S16  | 1   | °C   | Return temperature heat producer |
+| `hoval_flow_temp_hp`          | 10  | 1   | 7     | S16  | 1   | °C   | Flow temperature heat producer   |
+| `hoval_hp_temp`               | 60  | 254 | 17    | S16  | 1   | °C   | Heat producer temperature        |
+| `hoval_condenser_temp`        | 10  | 1   | 21028 | S16  | 1   | °C   | Condenser temperature            |
+| `hoval_evaporator_temp`       | 10  | 1   | 21029 | S16  | 1   | °C   | Evaporator temperature           |
+| `hoval_suction_gas_temp`      | 10  | 1   | 21030 | S16  | 1   | °C   | Suction gas temperature          |
 
 ### Setpoints
 
@@ -231,12 +253,14 @@ U32 value = [data_0, data_1, data_2, data_3] big-endian
 
 ### Power / Modulation
 
-| Metric name              | fg  | fn  | dp_id | Type | Dec | Unit | Description           |
-|--------------------------|-----|-----|-------|------|-----|------|-----------------------|
-| `hoval_modulation`       | 10  | 1   | 20052 | U8   | 0   | %    | Compressor modulation |
-| `hoval_hp_power_pct`     | 60  | 254 | 30    | S16  | 0   | %    | Heat producer power   |
-| `hoval_hp_power_abs_pct` | 60  | 254 | 31    | S16  | 0   | %    | Absolute power        |
-| `hoval_power_limit`      | 60  | 254 | 8     | S16  | 1   | %    | Power limit           |
+| Metric name              | fg  | fn  | dp_id | Type | Dec | Unit | Description              |
+|--------------------------|-----|-----|-------|------|-----|------|--------------------------|
+| `hoval_modulation`       | 10  | 1   | 20052 | U8   | 0   | %    | Compressor modulation    |
+| `hoval_hp_power_pct`     | 60  | 254 | 30    | S16  | 0   | %    | Heat producer power      |
+| `hoval_hp_power_abs_pct` | 60  | 254 | 31    | S16  | 0   | %    | Absolute power           |
+| `hoval_power_limit`      | 60  | 254 | 8     | S16  | 1   | %    | Power limit              |
+| `hoval_fan_speed`        | 10  | 1   | 23002 | S16  | 0   | rpm  | Outdoor unit fan speed   |
+| `hoval_fan_power`        | 10  | 1   | 23003 | S16  | 0   | -    | Outdoor unit fan stage   |
 
 ### Status
 
@@ -251,6 +275,8 @@ U32 value = [data_0, data_1, data_2, data_3] big-endian
 | `hoval_operating_status_hp`  | 10  | 1   | 20051 | U8   | 0   | Heat producer status       |
 | `hoval_fa_status`            | 60  | 254 | 34    | U8   | 0   | Function automation status |
 | `hoval_fa_defrost_demand`    | 60  | 254 | 22    | S16  | 1   | Defrost demand / evaporator |
+| `hoval_error_hc1`            | 1   | 0   | 500   | U8   | 0   | Error register HC1 (0xFF=ok) |
+| `hoval_error_dhw`            | 2   | 0   | 500   | U8   | 0   | Error register DHW (0xFF=ok) |
 
 #### Heating circuit status codes
 
@@ -337,13 +363,15 @@ Filter for your device type (WEZ, Lüftung, etc.).
 
 ### Plausibility check
 
-| Metric                    | Expected range | Notes                  |
-|---------------------------|----------------|------------------------|
-| `hoval_outdoor_temp_af1`  | -20 to +40 °C  | Depends on season      |
-| `hoval_flow_temp_hc1`     | 25 to 55 °C    | Higher in cold weather |
-| `hoval_dhw_temp`           | 35 to 60 °C    | ~42°C typical          |
-| `hoval_return_temp*`       | 20 to 45 °C    | Always < flow temp     |
-| `hoval_modulation`         | 0 to 100 %     | 0 when idle            |
+| Metric                      | Expected range | Notes                  |
+|-----------------------------|----------------|------------------------|
+| `hoval_outdoor_temp_af1`    | -20 to +40 °C  | Depends on season      |
+| `hoval_flow_temp_hc1`       | 25 to 55 °C    | Higher in cold weather |
+| `hoval_dhw_temp`             | 35 to 60 °C    | ~42°C typical          |
+| `hoval_return_temp*`         | 20 to 45 °C    | Always < flow temp     |
+| `hoval_modulation`           | 0 to 100 %     | 0 when idle            |
+| `hoval_condenser_temp`       | 25 to 60 °C    | > return temp when running |
+| `hoval_fan_speed`            | 0 to 1000      | 0 when idle, ~120 at low load |
 
 ### CAN bus errors
 

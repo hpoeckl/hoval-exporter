@@ -1287,6 +1287,10 @@
               {
                 "id": "custom.fillOpacity",
                 "value": 0
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
               }
             ]
           },
@@ -1316,6 +1320,10 @@
               {
                 "id": "custom.fillOpacity",
                 "value": 0
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
               }
             ]
           },
@@ -1360,6 +1368,10 @@
               {
                 "id": "custom.fillOpacity",
                 "value": 0
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
               }
             ]
           }
@@ -1511,6 +1523,10 @@
               {
                 "id": "custom.fillOpacity",
                 "value": 0
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
               }
             ]
           },
@@ -1540,6 +1556,10 @@
               {
                 "id": "custom.fillOpacity",
                 "value": 0
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
               }
             ]
           },
@@ -1569,6 +1589,10 @@
               {
                 "id": "custom.fillOpacity",
                 "value": 0
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
               }
             ]
           }
@@ -1801,6 +1825,10 @@
               {
                 "id": "custom.fillOpacity",
                 "value": 0
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
               }
             ]
           }
@@ -1964,6 +1992,10 @@
               {
                 "id": "custom.fillOpacity",
                 "value": 0
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
               }
             ]
           }

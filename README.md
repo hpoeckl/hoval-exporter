@@ -337,6 +337,24 @@ Datapoint IDs can be found in the
 [hoval-gateway datapoints.csv](https://github.com/chrishrb/hoval-gateway/blob/main/docs/datapoints.csv).
 Filter for your device type (WEZ, Lüftung, etc.).
 
+## Grafana Dashboard
+
+A pre-built dashboard is included: `hoval-heatpump-v1.json`
+
+Import in Grafana: **Dashboards → Import → Upload JSON file**, then select
+your Prometheus/VictoriaMetrics datasource when prompted.
+
+The dashboard includes:
+
+- **Overview** — 16 stat panels with key metrics at a glance
+- **Temperature Curves** — heating circuit and DHW temps with setpoints (dashed)
+- **Heat Producer Detail** — condenser, evaporator, suction gas temps + modulation
+- **Outdoor Unit** — defrost demand, fan speed/stage, thermal power
+- **Operating Status** — status codes, modes, error registers over time
+- **Setpoints** — all configurable setpoints in one view
+- **Counters** — operating hours, switching cycles, thermal energy
+- **Exporter Health** — frame rates and staleness (collapsed)
+
 ## Troubleshooting
 
 ### No data in metrics

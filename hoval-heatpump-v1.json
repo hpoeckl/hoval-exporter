@@ -2374,7 +2374,7 @@
     {
       "type": "timeseries",
       "title": "Status Codes Over Time",
-      "description": "HC1: 0=Off 1=Heating 2=Comfort 3=Eco 4=Frost 12=Fault 26=SmartGrid\nDHW: 0=Off 1=Charging 2=Comfort 5=Fault 6=Draw-off\nHP: 0=Off 1=Active",
+      "description": "HC1: 0=Off 1=Heating 2=Comfort 3=Eco 4=Frost 12=Fault 26=SmartGrid\nDHW: 0=Off 1=Charging 8=Reduced\nHP: 0=Off 1=Heating 4=DHW charging 8=Post-defrost(?) 51=Defrost",
       "datasource": {
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
@@ -2519,6 +2519,44 @@
                   "fixedColor": "#B8860B",
                   "mode": "fixed"
                 }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "HP Status"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "0": {
+                        "text": "0 - Off",
+                        "index": 0
+                      },
+                      "1": {
+                        "text": "1 - Heating",
+                        "index": 1
+                      },
+                      "4": {
+                        "text": "4 - DHW charging",
+                        "index": 2
+                      },
+                      "8": {
+                        "text": "8 - Post-defrost (?)",
+                        "index": 3
+                      },
+                      "51": {
+                        "text": "51 - Defrost",
+                        "index": 4
+                      }
+                    }
+                  }
+                ]
               }
             ]
           }

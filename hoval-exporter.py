@@ -62,7 +62,7 @@ BROADCAST_ADDR = 0x0FFF  # device_type=0x0F, device_id=0xFF
 MULTIFRAME_START = 0x1F400FFF  # Start frame: [flags][seq][op][fg][fn][dp_hi][dp_lo][data_0]
 MULTIFRAME_CONT  = 0x1E800FFF  # Continuation:  [seq][data_1][data_2][data_3][crc_hi][crc_lo]
 
-VERSION = "1.4.0"
+VERSION = "1.6.0"
 
 
 # ---------------------------------------------------------------------------
@@ -153,11 +153,37 @@ DEFAULT_DATAPOINTS = [
     DatapointDef("condenser_temp",      10,  1, 21028, "S16", 1, "celsius", "Condenser temperature"),
     DatapointDef("evaporator_temp",     10,  1, 21029, "S16", 1, "celsius", "Evaporator temperature"),
     DatapointDef("suction_gas_temp",    10,  1, 21030, "S16", 1, "celsius", "Suction gas temperature"),
-    DatapointDef("fan_speed",           10,  1, 23002, "S16", 0, "rpm",     "Outdoor unit fan speed"),
-    DatapointDef("fan_power",           10,  1, 23003, "S16", 0, "status",  "Outdoor unit fan power/stage"),
+    # Renamed from fan_speed/fan_power — actually electrical/thermal power per Modbus xlsx
+    # dp 23002 = electrical power input (S16, decimal=2 per Modbus xlsx → raw/100 = kW)
+    # dp 23003 = thermal power output (S16, decimal=0, kW — verify scale vs HovalConnect)
+    DatapointDef("electrical_power",       10,  1, 23002, "S16", 2, "kw",     "Electrical power input heat producer"),
+    DatapointDef("thermal_power_realtime", 10,  1, 23003, "S16", 0, "kw",     "Thermal power output heat producer"),
     DatapointDef("fa_flow_setpoint",    60,254,    16, "S16", 1, "celsius", "Function automation flow setpoint"),
     DatapointDef("fa_defrost_demand",   60,254,    22, "S16", 1, "celsius", "Function automation defrost demand / evaporator"),
     DatapointDef("fa_status",           60,254,    34, "U8",  0, "status",  "Function automation status"),
+
+    # Performance metrics
+    # dp 45 is "Coefficient of Performance" at fg=60/fn=254 per official Modbus xlsx
+    DatapointDef("cop_internal",           60,254,    45, "U8",  1, "ratio",   "Coefficient of performance (COP)"),
+    # dp 23008 = "Total energy efficiency H-Gen" (= SPF / Jahresarbeitszahl)
+    DatapointDef("spf",                    10,  1, 23008, "U8",  1, "ratio",   "Seasonal performance factor (SPF)"),
+
+    # Additional temperatures — dp 84/85 at fg=60/fn=254 per Modbus xlsx
+    DatapointDef("evaporator_inlet_temp",  60,254,    84, "S16", 1, "celsius", "Evaporator inlet / source flow temperature"),
+    DatapointDef("evaporator_surface_temp",60,254,    85, "S16", 1, "celsius", "Evaporator surface / source return temperature"),
+
+    # Pump speeds and flow
+    DatapointDef("hp_pump_speed",          10,  1,  1022, "U8",  0, "percent", "Heat pump circulation pump speed"),
+    DatapointDef("main_pump_speed",        10,  1,    22, "U8",  0, "percent", "Main circulation pump speed"),
+    DatapointDef("flow_rate",              10,  1, 21105, "U16", 2, "lpm",     "Flow rate"),
+    # dp 1009 is at fn=0 (additional heater context) per Modbus xlsx, not fn=1
+    DatapointDef("hp_power_setpoint",      10,  0,  1009, "U8",  0, "percent", "Heat generator power setpoint"),
+
+    # SmartGrid
+    DatapointDef("smartgrid_status",        0,  0, 21090, "U8",  0, "status",  "Smart Grid status (0=normal,1=preferred,2=blocked,3=forced,255=inactive)"),
+
+    # Electrical energy counter (passive, U32 multi-frame)
+    DatapointDef("electrical_energy_total",10,  1, 23009, "U32", 3, "mwh",     "Total electrical energy consumed", poll=False),
 ]
 
 
@@ -252,7 +278,6 @@ def decode_value(raw_bytes: bytes, dtype: str, decimal: int) -> Optional[float]:
                 return None
         elif dtype == "U8" or dtype == "LIST":
             val = raw_bytes[0]
-            return float(val)  # U8/LIST have no decimal scaling
         elif dtype == "U16":
             val = int.from_bytes(raw_bytes[:2], byteorder='big', signed=False)
             if val == 0xFFFF:  # sentinel

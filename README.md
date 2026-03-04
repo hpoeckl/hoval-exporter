@@ -8,7 +8,8 @@ using the TopTronic E controller family — datapoint IDs may vary.
 
 ## Features
 
-- Active polling of 47 datapoints (temperatures, setpoints, status, power, errors)
+- Active polling of 56 datapoints (temperatures, setpoints, status, power, COP, errors)
+- Internal COP + SPF from heat pump (no external power meter needed)
 - Passive decoding of multi-frame U32 responses (operating hours, thermal energy)
 - Own CAN address (`msg_id=6`) to avoid collisions with the Hoval Gateway
 - Sentinel value filtering (0x8000 / 0xFFFF = no sensor)
@@ -219,6 +220,8 @@ U32 value = [data_0, data_1, data_2, data_3] big-endian
 | `hoval_condenser_temp`        | 10  | 1   | 21028 | S16  | 1   | °C   | Condenser temperature            |
 | `hoval_evaporator_temp`       | 10  | 1   | 21029 | S16  | 1   | °C   | Evaporator temperature           |
 | `hoval_suction_gas_temp`      | 10  | 1   | 21030 | S16  | 1   | °C   | Suction gas temperature          |
+| `hoval_evaporator_inlet_temp`   | 60 |254 |    84 | S16  |   1 | °C   | Evaporator inlet / source flow temp       |
+| `hoval_evaporator_surface_temp` | 60 |254 |    85 | S16  |   1 | °C   | Evaporator surface / source return temp   |
 
 ### Setpoints
 
@@ -239,16 +242,27 @@ U32 value = [data_0, data_1, data_2, data_3] big-endian
 | `hoval_flow_setpoint_hp`             | 10  | 1   | 1007  | S16  | 1   | °C   | Flow setpoint heat producer       |
 | `hoval_fa_flow_setpoint`             | 60  | 254 | 16    | S16  | 1   | °C   | Function automation flow setpoint |
 
-### Power / Modulation
+### Power / Efficiency
 
-| Metric name              | fg  | fn  | dp_id | Type | Dec | Unit | Description              |
-|--------------------------|-----|-----|-------|------|-----|------|--------------------------|
-| `hoval_modulation`       | 10  | 1   | 20052 | U8   | 0   | %    | Compressor modulation    |
-| `hoval_hp_power_pct`     | 60  | 254 | 30    | S16  | 0   | %    | Heat producer power      |
-| `hoval_hp_power_abs_pct` | 60  | 254 | 31    | S16  | 0   | %    | Absolute power           |
-| `hoval_power_limit`      | 60  | 254 | 8     | S16  | 1   | %    | Power limit              |
-| `hoval_fan_speed`        | 10  | 1   | 23002 | S16  | 0   | rpm  | Outdoor unit fan speed   |
-| `hoval_fan_power`        | 10  | 1   | 23003 | S16  | 0   | -    | Outdoor unit fan stage   |
+| Metric name                      | fg | fn | dp_id | Type | Dec | Unit | Description                              |
+|----------------------------------|----|----|-------|------|-----|------|------------------------------------------|
+| `hoval_modulation`               | 10 |  1 | 20052 | U8   |   0 | %    | Compressor modulation                    |
+| `hoval_hp_power_pct`             | 60 |254 |    30 | S16  |   0 | %    | Heat producer power                      |
+| `hoval_hp_power_abs_pct`         | 60 |254 |    31 | S16  |   0 | %    | Absolute power                           |
+| `hoval_power_limit`              | 60 |254 |     8 | S16  |   1 | %    | Power limit                              |
+| `hoval_electrical_power`         | 10 |  1 | 23002 | S16  |   2 | kW   | Electrical power input (HP internal)     |
+| `hoval_thermal_power_realtime`   | 10 |  1 | 23003 | S16  |   0 | kW   | Thermal power output (HP internal)       |
+| `hoval_cop_internal`             | 60 |254 |    45 | U8   |   1 | -    | Coefficient of performance (COP)         |
+| `hoval_spf`                      | 10 |  1 | 23008 | U8   |   1 | -    | Seasonal performance factor (SPF)        |
+| `hoval_hp_pump_speed`            | 10 |  1 |  1022 | U8   |   0 | %    | HP circulation pump speed                |
+| `hoval_main_pump_speed`          | 10 |  1 |    22 | U8   |   0 | %    | Main circulation pump speed              |
+| `hoval_flow_rate`                | 10 |  1 | 21105 | U16  |   2 | l/min| Flow rate                                |
+| `hoval_hp_power_setpoint`        | 10 |  0 |  1009 | U8   |   0 | %    | Heat generator power setpoint            |
+
+> **Note on dp 23002/23003:** Previously named `fan_speed` / `fan_power`.
+> Cross-referencing with the official Hoval TTE-GW-Modbus-datapoints.xlsx (2025)
+> confirmed dp 23002 = electrical power input (decimal=2, kW) and
+> dp 23003 = thermal power output.
 
 ### Status
 
@@ -265,6 +279,7 @@ U32 value = [data_0, data_1, data_2, data_3] big-endian
 | `hoval_fa_defrost_demand`    | 60  | 254 | 22    | S16  | 1   | Defrost demand / evaporator |
 | `hoval_error_hc1`            | 1   | 0   | 500   | U8   | 0   | Error register HC1 (0xFF=ok) |
 | `hoval_error_dhw`            | 2   | 0   | 500   | U8   | 0   | Error register DHW (0xFF=ok) |
+| `hoval_smartgrid_status`      |  0 |  0 | 21090 | U8   |   0 | Smart Grid status                  |
 
 #### Heating circuit status codes
 
@@ -289,6 +304,45 @@ U32 value = [data_0, data_1, data_2, data_3] big-endian
 | 2    | Comfort charging   | 12   | SmartGrid priority |
 | 5    | Fault              | 13   | SmartGrid forced   |
 
+#### Heat producer status codes (`operating_status_hp`)
+
+Confirmed via CAN-bus capture + [HA community](https://community.home-assistant.io/t/hoval-belaria-integration-gateway/692870)
+(jgold mapping, verified by Hoval Product Management):
+
+| Code | Status               | Code | Status                  |
+|------|----------------------|------|-------------------------|
+|    0 | Off                  |   11 | High pressure fault     |
+|    1 | Heating              |   12 | Low pressure fault      |
+|    2 | Active cooling       |   16 | Restart delay           |
+|    3 | Lock                 |   17 | Energy generator block  |
+|    4 | DHW charging         |   18 | Primary lead time       |
+|    5 | Frost protection     |   19 | Primary run-on time     |
+|    6 | HP temp too low      |   44 | MOP                     |
+|    7 | HP flow too high     |   49 | Unsuccessful defrost    |
+|    8 | Defrost              |   51 | Condenser pump lead time|
+|    9 | Passive cooling      |   55 | Inverter/Modbus fault   |
+
+| Code | Status                   |
+|------|--------------------------|
+|   72 | Groundwater frost prot.  |
+|   73 | Flow rate WQ/GW circuit  |
+|   77 | Compressor limitation    |
+|   97 | Preheat compressor oil   |
+|   98 | Cold start               |
+|   99 | Machine not configured   |
+
+**Defrost sequence:** `51` (condenser pump lead) → `8` (defrost active) → `51` (pump run-on) → `1` (back to heating).
+
+#### SmartGrid status codes
+
+| Code | Status                         |
+|------|--------------------------------|
+|    0 | Normal operation               |
+|    1 | Preferred (SG-Ready 3)         |
+|    2 | Blocked (SG-Ready 1)           |
+|    3 | Forced acceptance (SG-Ready 4) |
+|  255 | Inactive / not configured      |
+
 ### Counters
 
 | Metric name                | fg  | fn  | dp_id | Type | Dec | Unit | Description               |
@@ -298,6 +352,7 @@ U32 value = [data_0, data_1, data_2, data_3] big-endian
 | `hoval_thermal_power`      | 10  | 1   | 29051 | U32  | 1   | kW   | Current thermal power      |
 | `hoval_thermal_energy`     | 10  | 1   | 29050 | U32  | 3   | MWh  | Total thermal energy       |
 | `hoval_compressor_starts`  | 10  | 1   | 2053  | U8   | 0   | -    | Compressor start counter   |
+| `hoval_electrical_energy_total`    | 10 |  1 | 23009 | U32  |   3 | MWh  | Total electrical energy     |
 
 > **Note:** U32 datapoints are decoded via multi-frame transport (passive only,
 > `poll=False`). They cannot be requested with single-frame GET.
@@ -337,6 +392,14 @@ Datapoint IDs can be found in the
 [hoval-gateway datapoints.csv](https://github.com/chrishrb/hoval-gateway/blob/main/docs/datapoints.csv).
 Filter for your device type (WEZ, Lüftung, etc.).
 
+Datapoint IDs can also be found in the
+[official Hoval TTE-GW-Modbus-datapoints.xlsx](http://www.hoval.com/misc/TTE/TTE-GW-Modbus-datapoints.xlsx).
+
+> **Note on dp_id ambiguity:** Some datapoint IDs map to different metrics
+> depending on the function group context. For example, dp 22 in `Automat`
+> context = "Heizung Sollwert" (S16, °C) but in `Wärmeerz.` context =
+> "Drehzahl Hauptpumpe" (U8, %). The fg/fn combination resolves this.
+
 ## Grafana Dashboard
 
 A pre-built dashboard is included: `hoval-heatpump-v1.json`
@@ -349,7 +412,8 @@ The dashboard includes:
 - **Overview** — 16 stat panels with key metrics at a glance
 - **Temperature Curves** — heating circuit and DHW temps with setpoints (dashed)
 - **Heat Producer Detail** — condenser, evaporator, suction gas temps + modulation
-- **Outdoor Unit** — defrost demand, fan speed/stage, thermal power
+- **Power & Efficiency** — electrical/thermal power, COP, SPF, pump speeds
+- **Outdoor Unit** — defrost demand, evaporator inlet/surface temps
 - **Operating Status** — status codes, modes, error registers over time
 - **Setpoints** — all configurable setpoints in one view
 - **Counters** — operating hours, switching cycles, thermal energy
@@ -377,7 +441,9 @@ The dashboard includes:
 | `hoval_return_temp*`         | 20 to 45 °C    | Always < flow temp     |
 | `hoval_modulation`           | 0 to 100 %     | 0 when idle            |
 | `hoval_condenser_temp`       | 25 to 60 °C    | > return temp when running |
-| `hoval_fan_speed`            | 0 to 1000      | 0 when idle, ~120 at low load |
+| `hoval_electrical_power`    | 0 to 4 kW      | 0 when idle, ~1-3.5 kW typical |
+| `hoval_cop_internal`        | 0 to 8         | 3-5 typical for air-source HP  |
+| `hoval_spf`                 | 0 to 8         | 3.5-5.0 seasonal average       |
 
 ### CAN bus errors
 
@@ -388,6 +454,8 @@ If `poll_errors_total` increases:
 
 ## References
 
+- [Hoval TTE-GW-Modbus-datapoints.xlsx](http://www.hoval.com/misc/TTE/TTE-GW-Modbus-datapoints.xlsx) — Official Modbus datapoint reference
+- [HA Community: Hoval Belaria Integration](https://community.home-assistant.io/t/hoval-belaria-integration-gateway/692870) — Status code mappings and Modbus TCP configs
 - [chrishrb/hoval-gateway](https://github.com/chrishrb/hoval-gateway) — Hoval TTE protocol reference and datapoints CSV
 - [Hoval TopTronic E documentation](https://www.hoval.com) — Controller manuals (installer access required)
 

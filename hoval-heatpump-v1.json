@@ -1,7 +1,7 @@
 {
   "uid": "hoval-heatpump-v1",
   "title": "Hoval Heat Pump v1.0",
-  "description": "Hoval Belaria Pro 13 — CAN-Bus monitoring via hoval-exporter",
+  "description": "Hoval Belaria Pro 13 \u2014 CAN-Bus monitoring via hoval-exporter",
   "schemaVersion": 42,
   "version": 1,
   "timezone": "Europe/Vienna",
@@ -487,7 +487,7 @@
     {
       "type": "stat",
       "title": "Status HC1",
-      "description": "0=Off, 1=Heating, 2=Comfort, 3=Eco, 4=Frost, 7=Holiday, 8=Party, 9=Cooling, 12=Fault, 26=SmartGrid",
+      "description": "0=Off 1=Heating 2=Comfort 3=Eco 4=Frost 5=ForcedOn 6=ForcedOff 7=Holiday 8=Party 9=Cooling 10=ComfortCool 11=EcoCool 12=Fault 13=Manual 14=ProtectedCool 15=PartyCool 16=DryoutHeat 22=CoolExtern 23=HeatExtern 26=SmartGrid",
       "datasource": {
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
@@ -529,7 +529,105 @@
               }
             ]
           },
-          "mappings": []
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "Off",
+                  "index": 0
+                },
+                "1": {
+                  "text": "Heating",
+                  "index": 1
+                },
+                "2": {
+                  "text": "Comfort",
+                  "index": 2
+                },
+                "3": {
+                  "text": "Eco",
+                  "index": 3
+                },
+                "4": {
+                  "text": "Frost",
+                  "index": 4
+                },
+                "5": {
+                  "text": "ForcedOn",
+                  "index": 5
+                },
+                "6": {
+                  "text": "ForcedOff",
+                  "index": 6
+                },
+                "7": {
+                  "text": "Holiday",
+                  "index": 7
+                },
+                "8": {
+                  "text": "Party",
+                  "index": 8
+                },
+                "9": {
+                  "text": "Cooling",
+                  "index": 9
+                },
+                "10": {
+                  "text": "ComfortCool",
+                  "index": 10
+                },
+                "11": {
+                  "text": "EcoCool",
+                  "index": 11
+                },
+                "12": {
+                  "text": "Fault",
+                  "index": 12
+                },
+                "13": {
+                  "text": "Manual",
+                  "index": 13
+                },
+                "14": {
+                  "text": "ProtCool",
+                  "index": 14
+                },
+                "15": {
+                  "text": "PartyCool",
+                  "index": 15
+                },
+                "16": {
+                  "text": "DryoutHeat",
+                  "index": 16
+                },
+                "17": {
+                  "text": "DryoutStat",
+                  "index": 17
+                },
+                "18": {
+                  "text": "DryoutCool",
+                  "index": 18
+                },
+                "19": {
+                  "text": "DryoutFinal",
+                  "index": 19
+                },
+                "22": {
+                  "text": "CoolExtern",
+                  "index": 20
+                },
+                "23": {
+                  "text": "HeatExtern",
+                  "index": 21
+                },
+                "26": {
+                  "text": "SmartGrid",
+                  "index": 22
+                }
+              }
+            }
+          ]
         },
         "overrides": []
       },
@@ -551,7 +649,7 @@
     {
       "type": "stat",
       "title": "Status DHW",
-      "description": "0=Off, 1=Charging, 2=Comfort, 5=Fault, 6=Draw-off, 8=Reduced, 12=SmartGrid",
+      "description": "0=Off 1=Charging 2=Comfort 3=ForcedOff 4=ForcedOn 5=Fault 6=DrawOff 7=Warning 8=Reduced 12=SmartGrid 13=SGForced",
       "datasource": {
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
@@ -593,7 +691,57 @@
               }
             ]
           },
-          "mappings": []
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "Off",
+                  "index": 0
+                },
+                "1": {
+                  "text": "Charging",
+                  "index": 1
+                },
+                "2": {
+                  "text": "Comfort",
+                  "index": 2
+                },
+                "3": {
+                  "text": "ForcedOff",
+                  "index": 3
+                },
+                "4": {
+                  "text": "ForcedOn",
+                  "index": 4
+                },
+                "5": {
+                  "text": "Fault",
+                  "index": 5
+                },
+                "6": {
+                  "text": "DrawOff",
+                  "index": 6
+                },
+                "7": {
+                  "text": "Warning",
+                  "index": 7
+                },
+                "8": {
+                  "text": "Reduced",
+                  "index": 8
+                },
+                "12": {
+                  "text": "SmartGrid",
+                  "index": 9
+                },
+                "13": {
+                  "text": "SGForced",
+                  "index": 10
+                }
+              }
+            }
+          ]
         },
         "overrides": []
       },
@@ -666,11 +814,51 @@
             ]
           },
           "mappings": [
-            { "type": "value", "options": { "0": { "text": "Normal", "index": 0 } } },
-            { "type": "value", "options": { "1": { "text": "Preferred", "index": 1 } } },
-            { "type": "value", "options": { "2": { "text": "Blocked", "index": 2 } } },
-            { "type": "value", "options": { "3": { "text": "Forced", "index": 3 } } },
-            { "type": "value", "options": { "255": { "text": "Inactive", "index": 4 } } }
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "Normal",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "1": {
+                  "text": "Preferred",
+                  "index": 1
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "2": {
+                  "text": "Blocked",
+                  "index": 2
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "3": {
+                  "text": "Forced",
+                  "index": 3
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "255": {
+                  "text": "Inactive",
+                  "index": 4
+                }
+              }
+            }
           ]
         },
         "overrides": []
@@ -3313,7 +3501,7 @@
     },
     {
       "type": "row",
-      "title": "⚙️ Setpoints & Configuration",
+      "title": "⚙️  Setpoints & Configuration",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -4120,330 +4308,332 @@
         "x": 0,
         "y": 68
       },
-      "collapsed": false
-    },
-    {
-      "type": "stat",
-      "title": "Exporter",
-      "description": "",
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 3,
-        "x": 0,
-        "y": 69
-      },
-      "targets": [
+      "collapsed": true,
+      "panels": [
         {
-          "expr": "hoval_exporter_up",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "fieldConfig": {
-        "defaults": {
-          "unit": "short",
-          "decimals": 0,
-          "color": {
-            "mode": "thresholds"
+          "type": "stat",
+          "title": "Exporter",
+          "description": "",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
           },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#C44536",
-                "value": null
-              },
-              {
-                "color": "#2D6A4F",
-                "value": 1
-              }
-            ]
+          "gridPos": {
+            "h": 8,
+            "w": 3,
+            "x": 0,
+            "y": 69
           },
-          "mappings": []
-        },
-        "overrides": []
-      },
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "textMode": "value",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
+          "targets": [
+            {
+              "expr": "hoval_exporter_up",
+              "legendFormat": "",
+              "refId": "A"
+            }
           ],
-          "fields": "",
-          "values": false
-        }
-      }
-    },
-    {
-      "type": "timeseries",
-      "title": "Exporter Counters",
-      "description": "",
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 11,
-        "x": 3,
-        "y": 69
-      },
-      "targets": [
-        {
-          "expr": "rate(hoval_exporter_frames_received_total[5m])",
-          "legendFormat": "Frames/s",
-          "refId": "A"
-        },
-        {
-          "expr": "rate(hoval_exporter_responses_decoded_total[5m])",
-          "legendFormat": "Decoded/s",
-          "refId": "B"
-        },
-        {
-          "expr": "rate(hoval_exporter_unknown_datapoints_total[5m])",
-          "legendFormat": "Unknown/s",
-          "refId": "C"
-        },
-        {
-          "expr": "rate(hoval_exporter_poll_errors_total[5m])",
-          "legendFormat": "Poll Errors/s",
-          "refId": "D"
-        }
-      ],
-      "fieldConfig": {
-        "defaults": {
-          "unit": "short",
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "drawStyle": "line",
-            "lineInterpolation": "smooth",
-            "lineWidth": 1,
-            "fillOpacity": 25,
-            "gradientMode": "opacity",
-            "spanNulls": true,
-            "showPoints": "never",
-            "pointSize": 5,
-            "stacking": {
-              "mode": "none"
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "decimals": 0,
+              "color": {
+                "mode": "thresholds"
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "#C44536",
+                    "value": null
+                  },
+                  {
+                    "color": "#2D6A4F",
+                    "value": 1
+                  }
+                ]
+              },
+              "mappings": []
             },
-            "thresholdsStyle": {
-              "mode": "off"
+            "overrides": []
+          },
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "textMode": "value",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
             }
-          },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "mappings": [],
-          "decimals": 2
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Frames/s"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#5794F2",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Decoded/s"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#73BF69",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Unknown/s"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#B8860B",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Poll Errors/s"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#C44536",
-                  "mode": "fixed"
-                }
-              }
-            ]
           }
-        ]
-      },
-      "options": {
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "calcs": [
-            "mean",
-            "lastNotNull"
-          ]
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "desc"
-        }
-      }
-    },
-    {
-      "type": "timeseries",
-      "title": "Last Update Timestamps",
-      "description": "",
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 10,
-        "x": 14,
-        "y": 69
-      },
-      "targets": [
-        {
-          "expr": "time() - hoval_exporter_last_poll_timestamp_seconds",
-          "legendFormat": "Since Last Poll",
-          "refId": "A"
         },
         {
-          "expr": "time() - hoval_exporter_last_receive_timestamp_seconds",
-          "legendFormat": "Since Last Receive",
-          "refId": "B"
-        }
-      ],
-      "fieldConfig": {
-        "defaults": {
-          "unit": "s",
-          "color": {
-            "mode": "palette-classic"
+          "type": "timeseries",
+          "title": "Exporter Counters",
+          "description": "",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
           },
-          "custom": {
-            "drawStyle": "line",
-            "lineInterpolation": "smooth",
-            "lineWidth": 1,
-            "fillOpacity": 25,
-            "gradientMode": "opacity",
-            "spanNulls": true,
-            "showPoints": "never",
-            "pointSize": 5,
-            "stacking": {
-              "mode": "none"
+          "gridPos": {
+            "h": 8,
+            "w": 11,
+            "x": 3,
+            "y": 69
+          },
+          "targets": [
+            {
+              "expr": "rate(hoval_exporter_frames_received_total[5m])",
+              "legendFormat": "Frames/s",
+              "refId": "A"
             },
-            "thresholdsStyle": {
-              "mode": "off"
+            {
+              "expr": "rate(hoval_exporter_responses_decoded_total[5m])",
+              "legendFormat": "Decoded/s",
+              "refId": "B"
+            },
+            {
+              "expr": "rate(hoval_exporter_unknown_datapoints_total[5m])",
+              "legendFormat": "Unknown/s",
+              "refId": "C"
+            },
+            {
+              "expr": "rate(hoval_exporter_poll_errors_total[5m])",
+              "legendFormat": "Poll Errors/s",
+              "refId": "D"
             }
-          },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "smooth",
+                "lineWidth": 1,
+                "fillOpacity": 25,
+                "gradientMode": "opacity",
+                "spanNulls": true,
+                "showPoints": "never",
+                "pointSize": 5,
+                "stacking": {
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "mappings": [],
+              "decimals": 2
+            },
+            "overrides": [
               {
-                "color": "green",
-                "value": null
+                "matcher": {
+                  "id": "byName",
+                  "options": "Frames/s"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#5794F2",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
               },
               {
-                "color": "#B8860B",
-                "value": 60
+                "matcher": {
+                  "id": "byName",
+                  "options": "Decoded/s"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#73BF69",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
               },
               {
-                "color": "#C44536",
-                "value": 120
+                "matcher": {
+                  "id": "byName",
+                  "options": "Unknown/s"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#B8860B",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Poll Errors/s"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#C44536",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
               }
             ]
           },
-          "mappings": []
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Since Last Poll"
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "calcs": [
+                "mean",
+                "lastNotNull"
+              ]
             },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#5794F2",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Since Last Receive"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#73BF69",
-                  "mode": "fixed"
-                }
-              }
-            ]
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
           }
-        ]
-      },
-      "options": {
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "calcs": [
-            "mean",
-            "lastNotNull"
-          ]
         },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "desc"
+        {
+          "type": "timeseries",
+          "title": "Last Update Timestamps",
+          "description": "",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 10,
+            "x": 14,
+            "y": 69
+          },
+          "targets": [
+            {
+              "expr": "time() - hoval_exporter_last_poll_timestamp_seconds",
+              "legendFormat": "Since Last Poll",
+              "refId": "A"
+            },
+            {
+              "expr": "time() - hoval_exporter_last_receive_timestamp_seconds",
+              "legendFormat": "Since Last Receive",
+              "refId": "B"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "smooth",
+                "lineWidth": 1,
+                "fillOpacity": 25,
+                "gradientMode": "opacity",
+                "spanNulls": true,
+                "showPoints": "never",
+                "pointSize": 5,
+                "stacking": {
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "#B8860B",
+                    "value": 60
+                  },
+                  {
+                    "color": "#C44536",
+                    "value": 120
+                  }
+                ]
+              },
+              "mappings": []
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Since Last Poll"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#5794F2",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Since Last Receive"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#73BF69",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "calcs": [
+                "mean",
+                "lastNotNull"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
         }
-      }
+      ]
     }
   ],
   "__inputs": [

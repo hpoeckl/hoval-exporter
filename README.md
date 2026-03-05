@@ -8,7 +8,7 @@ using the TopTronic E controller family — datapoint IDs may vary.
 
 ## Features
 
-- Active polling of 53 datapoints (temperatures, setpoints, status, power, COP, errors)
+- Active polling of 48 datapoints (temperatures, setpoints, status, power, COP, errors)
 - Internal COP + SPF from heat pump (no external power meter needed)
 - Passive decoding of multi-frame U32 responses (operating hours, thermal energy)
 - Own CAN address (`msg_id=6`) to avoid collisions with the Hoval Gateway
@@ -251,10 +251,8 @@ U32 value = [data_0, data_1, data_2, data_3] big-endian
 | `hoval_thermal_power_realtime`   | 10 |  1 | 23003 | S16  |   0 | kW   | Thermal power output (HP internal)       |
 | `hoval_cop_internal`             | 60 |254 |    45 | U8   |   1 | -    | Coefficient of performance (COP)         |
 | `hoval_spf`                      | 10 |  1 | 23008 | U8   |   1 | -    | Seasonal performance factor (SPF)        |
-| `hoval_hp_pump_speed`            | 10 |  1 |  1022 | U8   |   0 | %    | HP circulation pump speed                |
-| `hoval_main_pump_speed`          | 10 |  1 |    22 | U8   |   0 | %    | Main circulation pump speed              |
-| `hoval_flow_rate`                | 10 |  1 | 21105 | U16  |   2 | l/min| Flow rate                                |
-| `hoval_hp_power_setpoint`        | 10 |  0 |  1009 | U8   |   0 | %    | Heat generator power setpoint            |
+> **Note:** Pump speeds (`hp_pump_speed`, `main_pump_speed`), `flow_rate`, and `hp_power_setpoint`
+> were removed — they consistently return 0 on the Belaria Pro 13.
 
 > **Note on dp 23002/23003:** dp 23002 = electrical power input (decimal=2, kW),
 > dp 23003 = thermal power output. Confirmed via TTE-GW-Modbus-datapoints.xlsx.
@@ -432,7 +430,7 @@ The dashboard includes:
 - **Temperature Curves** — heating circuit and DHW temps with setpoints (dashed)
 - **Temperature Delta & Efficiency** — flow-return delta (heat transfer indicator), realtime thermal/electrical ratio, COP and SPF trends
 - **Heat Producer Detail** — condenser, evaporator, suction gas temps + modulation
-- **Power & Efficiency** — electrical/thermal power, COP, SPF, pump speeds
+- **Power & Efficiency** — electrical/thermal power, COP, SPF, modulation
 - **Outdoor Unit** — defrost demand with defrost-active indicator, evaporator inlet/surface temps
 - **Operating Status** — status codes, operating modes (state timeline), error registers
 - **Setpoints** — all configurable setpoints in one view

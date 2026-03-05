@@ -166,12 +166,8 @@ DEFAULT_DATAPOINTS = [
     DatapointDef("evaporator_inlet_temp",  60,254,    84, "S16", 1, "celsius", "Evaporator inlet / source flow temperature"),
     DatapointDef("evaporator_surface_temp",60,254,    85, "S16", 1, "celsius", "Evaporator surface / source return temperature"),
 
-    # Pump speeds and flow
-    DatapointDef("hp_pump_speed",          10,  1,  1022, "U8",  0, "percent", "Heat pump circulation pump speed"),
-    DatapointDef("main_pump_speed",        10,  1,    22, "U8",  0, "percent", "Main circulation pump speed"),
-    DatapointDef("flow_rate",              10,  1, 21105, "U16", 2, "lpm",     "Flow rate"),
-    # dp 1009 is at fn=0 (additional heater context) per Modbus xlsx, not fn=1
-    DatapointDef("hp_power_setpoint",      10,  0,  1009, "U8",  0, "percent", "Heat generator power setpoint"),
+    # Pump speeds and flow — removed: hp_pump_speed (dp 1022), main_pump_speed (dp 22),
+    # flow_rate (dp 21105), hp_power_setpoint (dp 1009) — all return 0 on Belaria Pro 13
 
     # SmartGrid
     DatapointDef("smartgrid_status",        0,  0, 21090, "U8",  0, "status",  "Smart Grid status (0=normal,1=preferred,2=blocked,3=forced,255=inactive)"),

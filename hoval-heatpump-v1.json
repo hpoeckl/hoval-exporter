@@ -1,7 +1,7 @@
 {
   "uid": "hoval-heatpump-v1",
   "title": "Hoval Heat Pump v1.0",
-  "description": "Hoval Belaria Pro 13 \u2014 CAN-Bus monitoring via hoval-exporter",
+  "description": "Hoval Belaria Pro 13 — CAN-Bus monitoring via hoval-exporter",
   "schemaVersion": 42,
   "version": 1,
   "timezone": "browser",
@@ -1931,8 +1931,8 @@
     },
     {
       "type": "timeseries",
-      "title": "Temperature Delta (Flow \u2212 Return)",
-      "description": "Supply/return temperature difference \u2014 indicates heat transfer efficiency",
+      "title": "Temperature Delta (Flow − Return)",
+      "description": "Supply/return temperature difference — indicates heat transfer efficiency",
       "datasource": {
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
@@ -2977,8 +2977,8 @@
     },
     {
       "type": "timeseries",
-      "title": "Pump Speeds & Flow",
-      "description": "",
+      "title": "Modulation & Power %",
+      "description": "Compressor modulation, HP power %, absolute power %, power limit",
       "datasource": {
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
@@ -2991,24 +2991,40 @@
       },
       "targets": [
         {
-          "expr": "hoval_hp_pump_speed",
-          "legendFormat": "HP Pump",
-          "refId": "A"
+          "expr": "hoval_modulation",
+          "legendFormat": "Modulation",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
         },
         {
-          "expr": "hoval_main_pump_speed",
-          "legendFormat": "Main Pump",
-          "refId": "B"
+          "expr": "hoval_hp_power_pct",
+          "legendFormat": "HP Power %",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
         },
         {
-          "expr": "hoval_flow_rate",
-          "legendFormat": "Flow Rate",
-          "refId": "C"
+          "expr": "hoval_hp_power_abs_pct",
+          "legendFormat": "HP Power Abs %",
+          "refId": "C",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
         },
         {
-          "expr": "hoval_hp_power_setpoint",
-          "legendFormat": "Power Setpoint",
-          "refId": "D"
+          "expr": "hoval_power_limit",
+          "legendFormat": "Power Limit",
+          "refId": "D",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
         }
       ],
       "fieldConfig": {
@@ -3050,7 +3066,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "HP Pump"
+              "options": "Modulation"
             },
             "properties": [
               {
@@ -3065,13 +3081,13 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Main Pump"
+              "options": "HP Power %"
             },
             "properties": [
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "#73BF69",
+                  "fixedColor": "#C44536",
                   "mode": "fixed"
                 }
               }
@@ -3080,30 +3096,22 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Flow Rate"
+              "options": "HP Power Abs %"
             },
             "properties": [
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "#FF9830",
+                  "fixedColor": "#B8860B",
                   "mode": "fixed"
                 }
-              },
-              {
-                "id": "unit",
-                "value": "lpm"
-              },
-              {
-                "id": "custom.axisPlacement",
-                "value": "right"
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "Power Setpoint"
+              "options": "Power Limit"
             },
             "properties": [
               {
@@ -3126,6 +3134,10 @@
               {
                 "id": "custom.fillOpacity",
                 "value": 0
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
               }
             ]
           }

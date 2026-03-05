@@ -62,7 +62,7 @@ BROADCAST_ADDR = 0x0FFF  # device_type=0x0F, device_id=0xFF
 MULTIFRAME_START = 0x1F400FFF  # Start frame: [flags][seq][op][fg][fn][dp_hi][dp_lo][data_0]
 MULTIFRAME_CONT  = 0x1E800FFF  # Continuation:  [seq][data_1][data_2][data_3][crc_hi][crc_lo]
 
-VERSION = "1.6.0"
+VERSION = "1.7.0"
 
 
 # ---------------------------------------------------------------------------
@@ -98,10 +98,8 @@ class DatapointDef:
 DEFAULT_DATAPOINTS = [
     # Temperatures
     DatapointDef("outdoor_temp_af1",        0,  0,     0, "S16", 1, "celsius", "Outdoor temperature sensor 1 (AF1)"),
-    DatapointDef("outdoor_temp_af2",        0,  0, 21100, "S16", 1, "celsius", "Outdoor temperature sensor 2 (AF2)"),
+    # AF2, HC2, HC3 removed — not physically connected on single-circuit Belaria Pro 13
     DatapointDef("flow_temp_hc1",           1,  0,     2, "S16", 1, "celsius", "Flow temperature heating circuit 1"),
-    DatapointDef("flow_temp_hc2",           1,  1,     2, "S16", 1, "celsius", "Flow temperature heating circuit 2"),
-    DatapointDef("flow_temp_hc3",           1,  2,     2, "S16", 1, "celsius", "Flow temperature heating circuit 3"),
     DatapointDef("dhw_temp",                2,  0,     4, "S16", 1, "celsius", "Domestic hot water temperature"),
     DatapointDef("return_temp",            60,254,    29, "S16", 1, "celsius", "Return temperature"),
     DatapointDef("return_temp_hp",         10,  1,     8, "S16", 1, "celsius", "Return temperature heat producer"),
@@ -122,7 +120,6 @@ DEFAULT_DATAPOINTS = [
 
     # Status
     DatapointDef("status_hc1",              1,  0,  2051, "U8",  0, "status", "Heating circuit 1 status"),
-    DatapointDef("status_hc2",              1,  1,  2051, "U8",  0, "status", "Heating circuit 2 status"),
     DatapointDef("status_dhw",              2,  0,  2052, "U8",  0, "status", "Domestic hot water status"),
     DatapointDef("operating_message",      10,  1, 20053, "U8",  0, "status", "Operating message"),
 

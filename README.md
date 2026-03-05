@@ -8,7 +8,7 @@ using the TopTronic E controller family — datapoint IDs may vary.
 
 ## Features
 
-- Active polling of 56 datapoints (temperatures, setpoints, status, power, COP, errors)
+- Active polling of 53 datapoints (temperatures, setpoints, status, power, COP, errors)
 - Internal COP + SPF from heat pump (no external power meter needed)
 - Passive decoding of multi-frame U32 responses (operating hours, thermal energy)
 - Own CAN address (`msg_id=6`) to avoid collisions with the Hoval Gateway
@@ -206,11 +206,8 @@ U32 value = [data_0, data_1, data_2, data_3] big-endian
 | Metric name                  | fg  | fn  | dp_id | Type | Dec | Unit | Description                      |
 |------------------------------|-----|-----|-------|------|-----|------|----------------------------------|
 | `hoval_outdoor_temp_af1`     | 0   | 0   | 0     | S16  | 1   | °C   | Outdoor sensor 1 (AF1)           |
-| `hoval_outdoor_temp_af2`     | 0   | 0   | 21100 | S16  | 1   | °C   | Outdoor sensor 2 (AF2)           |
 | `hoval_mixed_flow_temp_hc1`  | 1   | 0   | 0     | S16  | 1   | °C   | Mixed flow temperature HC1       |
 | `hoval_flow_temp_hc1`        | 1   | 0   | 2     | S16  | 1   | °C   | Flow temperature HC1             |
-| `hoval_flow_temp_hc2`        | 1   | 1   | 2     | S16  | 1   | °C   | Flow temperature HC2             |
-| `hoval_flow_temp_hc3`        | 1   | 2   | 2     | S16  | 1   | °C   | Flow temperature HC3             |
 | `hoval_dhw_temp`              | 2   | 0   | 4     | S16  | 1   | °C   | Domestic hot water temperature   |
 | `hoval_dhw_storage_bottom`    | 2   | 0   | 6     | S16  | 1   | °C   | DHW storage bottom sensor        |
 | `hoval_return_temp`           | 60  | 254 | 29    | S16  | 1   | °C   | Return temperature               |
@@ -267,7 +264,6 @@ U32 value = [data_0, data_1, data_2, data_3] big-endian
 | Metric name                  | fg  | fn  | dp_id | Type | Dec | Description                |
 |------------------------------|-----|-----|-------|------|-----|----------------------------|
 | `hoval_status_hc1`           | 1   | 0   | 2051  | U8   | 0   | Heating circuit 1 status   |
-| `hoval_status_hc2`           | 1   | 1   | 2051  | U8   | 0   | Heating circuit 2 status   |
 | `hoval_status_dhw`           | 2   | 0   | 2052  | U8   | 0   | Hot water status           |
 | `hoval_operating_message`    | 10  | 1   | 20053 | U8   | 0   | Operating message          |
 | `hoval_operating_mode_hc1`   | 1   | 0   | 3050  | U8   | 0   | Operating mode HC1         |
@@ -432,15 +428,19 @@ your Prometheus/VictoriaMetrics datasource when prompted.
 
 The dashboard includes:
 
-- **Overview** — 16 stat panels with key metrics at a glance
+- **Overview** — stat panels for temperatures, power, status, COP, SPF, energy totals, and exporter health
 - **Temperature Curves** — heating circuit and DHW temps with setpoints (dashed)
+- **Temperature Delta & Efficiency** — flow-return delta (heat transfer indicator), realtime thermal/electrical ratio, COP and SPF trends
 - **Heat Producer Detail** — condenser, evaporator, suction gas temps + modulation
 - **Power & Efficiency** — electrical/thermal power, COP, SPF, pump speeds
-- **Outdoor Unit** — defrost demand, evaporator inlet/surface temps
-- **Operating Status** — status codes, modes, error registers over time
+- **Outdoor Unit** — defrost demand with defrost-active indicator, evaporator inlet/surface temps
+- **Operating Status** — status codes, operating modes (state timeline), error registers
 - **Setpoints** — all configurable setpoints in one view
-- **Counters** — operating hours, switching cycles, thermal energy
+- **Counters** — operating hours, switching cycles, thermal/electrical energy, COP/SPF trends
 - **Exporter Health** — frame rates and staleness (collapsed)
+
+> **Note:** HC2/HC3/AF2 datapoints have been removed (not physically connected on single-circuit Belaria Pro 13).
+> If your system has multiple heating circuits, re-add them to `DEFAULT_DATAPOINTS`.
 
 ## Troubleshooting
 

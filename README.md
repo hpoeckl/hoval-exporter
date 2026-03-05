@@ -259,10 +259,8 @@ U32 value = [data_0, data_1, data_2, data_3] big-endian
 | `hoval_flow_rate`                | 10 |  1 | 21105 | U16  |   2 | l/min| Flow rate                                |
 | `hoval_hp_power_setpoint`        | 10 |  0 |  1009 | U8   |   0 | %    | Heat generator power setpoint            |
 
-> **Note on dp 23002/23003:** Previously named `fan_speed` / `fan_power`.
-> Cross-referencing with the official Hoval TTE-GW-Modbus-datapoints.xlsx (2025)
-> confirmed dp 23002 = electrical power input (decimal=2, kW) and
-> dp 23003 = thermal power output.
+> **Note on dp 23002/23003:** dp 23002 = electrical power input (decimal=2, kW),
+> dp 23003 = thermal power output. Confirmed via TTE-GW-Modbus-datapoints.xlsx.
 
 ### Status
 
@@ -342,6 +340,31 @@ Confirmed via CAN-bus capture + [HA community](https://community.home-assistant.
 |    2 | Blocked (SG-Ready 1)           |
 |    3 | Forced acceptance (SG-Ready 4) |
 |  255 | Inactive / not configured      |
+
+#### Operating mode HC (`operating_mode_hc1`, dp 3050)
+
+Values are sparse (from xlsx Text columns):
+
+| Code | Mode        | Code | Mode        |
+|------|-------------|------|-------------|
+|    0 | Standby     |    5 | Eco         |
+|    1 | Week 1      |    7 | Manual heat |
+|    2 | Week 2      |    8 | Manual cool |
+|    4 | Constant    |      |             |
+
+#### Operating mode DHW (`operating_mode_dhw`, dp 5050)
+
+| Code | Mode     |
+|------|----------|
+|    0 | Standby  |
+|    1 | Week 1   |
+|    2 | Week 2   |
+|    4 | Constant |
+|    6 | Eco      |
+
+#### Operating message (`operating_message`, dp 20053)
+
+Binary flag: 0 = compressor off, 1 = compressor running.
 
 ### Counters
 

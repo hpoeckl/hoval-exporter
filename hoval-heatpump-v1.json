@@ -3137,134 +3137,6 @@
                 }
               }
             ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "HP Status"
-            },
-            "properties": [
-              {
-                "id": "mappings",
-                "value": [
-                  {
-                    "type": "value",
-                    "options": {
-                      "0": {
-                        "text": "Off",
-                        "color": "text",
-                        "index": 0
-                      },
-                      "1": {
-                        "text": "Heating",
-                        "color": "green",
-                        "index": 1
-                      },
-                      "2": {
-                        "text": "Active Cooling",
-                        "color": "blue",
-                        "index": 2
-                      },
-                      "3": {
-                        "text": "Lock",
-                        "color": "red",
-                        "index": 3
-                      },
-                      "4": {
-                        "text": "DHW Charging",
-                        "color": "orange",
-                        "index": 4
-                      },
-                      "5": {
-                        "text": "Frost Protection",
-                        "color": "purple",
-                        "index": 5
-                      },
-                      "6": {
-                        "text": "HP Temp Low",
-                        "color": "red",
-                        "index": 6
-                      },
-                      "7": {
-                        "text": "HP Flow High",
-                        "color": "red",
-                        "index": 7
-                      },
-                      "8": {
-                        "text": "Defrost",
-                        "color": "yellow",
-                        "index": 8
-                      },
-                      "9": {
-                        "text": "Passive Cooling",
-                        "color": "light-blue",
-                        "index": 9
-                      },
-                      "11": {
-                        "text": "HD Fault",
-                        "color": "red",
-                        "index": 10
-                      },
-                      "12": {
-                        "text": "LP Fault",
-                        "color": "red",
-                        "index": 11
-                      },
-                      "16": {
-                        "text": "Restart Delay",
-                        "color": "text",
-                        "index": 12
-                      },
-                      "17": {
-                        "text": "Energy Block",
-                        "color": "text",
-                        "index": 13
-                      },
-                      "44": {
-                        "text": "MOP",
-                        "color": "yellow",
-                        "index": 14
-                      },
-                      "49": {
-                        "text": "Defrost Failed",
-                        "color": "red",
-                        "index": 15
-                      },
-                      "51": {
-                        "text": "Cond. Pump Lead",
-                        "color": "yellow",
-                        "index": 16
-                      },
-                      "55": {
-                        "text": "Inverter Fault",
-                        "color": "red",
-                        "index": 17
-                      },
-                      "77": {
-                        "text": "Compressor Limit",
-                        "color": "yellow",
-                        "index": 18
-                      },
-                      "97": {
-                        "text": "Oil Preheat",
-                        "color": "text",
-                        "index": 19
-                      },
-                      "98": {
-                        "text": "Cold Start",
-                        "color": "text",
-                        "index": 20
-                      },
-                      "99": {
-                        "text": "Not Configured",
-                        "color": "red",
-                        "index": 21
-                      }
-                    }
-                  }
-                ]
-              }
-            ]
           }
         ]
       },
@@ -3284,7 +3156,7 @@
       }
     },
     {
-      "type": "timeseries",
+      "type": "state-timeline",
       "title": "Operating Modes",
       "description": "",
       "datasource": {
@@ -3311,37 +3183,15 @@
       ],
       "fieldConfig": {
         "defaults": {
-          "unit": "short",
           "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "drawStyle": "line",
-            "lineInterpolation": "smooth",
-            "lineWidth": 2,
-            "fillOpacity": 0,
-            "gradientMode": "opacity",
-            "spanNulls": true,
-            "showPoints": "never",
-            "pointSize": 5,
-            "stacking": {
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
+            "mode": "fixed",
+            "fixedColor": "#2A2E35"
           },
           "mappings": [],
-          "decimals": 0
+          "custom": {
+            "lineWidth": 0,
+            "fillOpacity": 80
+          }
         },
         "overrides": [
           {
@@ -3353,9 +3203,54 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "#5794F2",
-                  "mode": "fixed"
+                  "mode": "fixed",
+                  "fixedColor": "#5794F2"
                 }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "0": {
+                        "text": "Standby",
+                        "color": "#2A2E35",
+                        "index": 0
+                      },
+                      "1": {
+                        "text": "Week 1",
+                        "color": "#5794F2",
+                        "index": 1
+                      },
+                      "2": {
+                        "text": "Week 2",
+                        "color": "#5794F2",
+                        "index": 2
+                      },
+                      "4": {
+                        "text": "Constant",
+                        "color": "#B8860B",
+                        "index": 3
+                      },
+                      "5": {
+                        "text": "Eco",
+                        "color": "#2D6A4F",
+                        "index": 4
+                      },
+                      "7": {
+                        "text": "Man.Heat",
+                        "color": "#C44536",
+                        "index": 5
+                      },
+                      "8": {
+                        "text": "Man.Cool",
+                        "color": "#73BF69",
+                        "index": 6
+                      }
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -3368,26 +3263,61 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "#FF9830",
-                  "mode": "fixed"
+                  "mode": "fixed",
+                  "fixedColor": "#FF9830"
                 }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "0": {
+                        "text": "Standby",
+                        "color": "#2A2E35",
+                        "index": 0
+                      },
+                      "1": {
+                        "text": "Week 1",
+                        "color": "#FF9830",
+                        "index": 1
+                      },
+                      "2": {
+                        "text": "Week 2",
+                        "color": "#FF9830",
+                        "index": 2
+                      },
+                      "4": {
+                        "text": "Constant",
+                        "color": "#B8860B",
+                        "index": 3
+                      },
+                      "6": {
+                        "text": "Eco",
+                        "color": "#2D6A4F",
+                        "index": 4
+                      }
+                    }
+                  }
+                ]
               }
             ]
           }
         ]
       },
       "options": {
+        "showValue": "auto",
+        "rowHeight": 0.8,
+        "mergeValues": true,
+        "alignValue": "center",
         "legend": {
           "displayMode": "list",
-          "placement": "bottom",
-          "calcs": [
-            "mean",
-            "lastNotNull"
-          ]
+          "placement": "bottom"
         },
         "tooltip": {
-          "mode": "multi",
-          "sort": "desc"
+          "mode": "single",
+          "sort": "none"
         }
       }
     },

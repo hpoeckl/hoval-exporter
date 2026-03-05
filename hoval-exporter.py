@@ -153,9 +153,6 @@ DEFAULT_DATAPOINTS = [
     DatapointDef("condenser_temp",      10,  1, 21028, "S16", 1, "celsius", "Condenser temperature"),
     DatapointDef("evaporator_temp",     10,  1, 21029, "S16", 1, "celsius", "Evaporator temperature"),
     DatapointDef("suction_gas_temp",    10,  1, 21030, "S16", 1, "celsius", "Suction gas temperature"),
-    # Renamed from fan_speed/fan_power — actually electrical/thermal power per Modbus xlsx
-    # dp 23002 = electrical power input (S16, decimal=2 per Modbus xlsx → raw/100 = kW)
-    # dp 23003 = thermal power output (S16, decimal=0, kW — verify scale vs HovalConnect)
     DatapointDef("electrical_power",       10,  1, 23002, "S16", 2, "kw",     "Electrical power input heat producer"),
     DatapointDef("thermal_power_realtime", 10,  1, 23003, "S16", 0, "kw",     "Thermal power output heat producer"),
     DatapointDef("fa_flow_setpoint",    60,254,    16, "S16", 1, "celsius", "Function automation flow setpoint"),

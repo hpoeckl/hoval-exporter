@@ -118,7 +118,8 @@
           "fields": "",
           "values": false
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "stat",
@@ -190,7 +191,8 @@
           "fields": "",
           "values": false
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "stat",
@@ -262,7 +264,8 @@
           "fields": "",
           "values": false
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "stat",
@@ -338,7 +341,8 @@
           "fields": "",
           "values": false
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "stat",
@@ -350,7 +354,7 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 2,
+        "w": 3,
         "x": 11,
         "y": 1
       },
@@ -410,79 +414,8 @@
           "fields": "",
           "values": false
         }
-      }
-    },
-    {
-      "type": "stat",
-      "title": "HP Power",
-      "description": "",
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
       },
-      "gridPos": {
-        "h": 4,
-        "w": 2,
-        "x": 13,
-        "y": 1
-      },
-      "targets": [
-        {
-          "expr": "hoval_hp_power_pct",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "fieldConfig": {
-        "defaults": {
-          "unit": "percent",
-          "decimals": 0,
-          "color": {
-            "mode": "thresholds"
-          },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#2A2E35",
-                "value": null
-              },
-              {
-                "color": "#2D6A4F",
-                "value": 1
-              },
-              {
-                "color": "#5C8A4F",
-                "value": 30
-              },
-              {
-                "color": "#B8860B",
-                "value": 60
-              },
-              {
-                "color": "#C44536",
-                "value": 85
-              }
-            ]
-          },
-          "mappings": []
-        },
-        "overrides": []
-      },
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "textMode": "value",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        }
-      }
+      "transparent": true
     },
     {
       "type": "stat",
@@ -495,7 +428,7 @@
       "gridPos": {
         "h": 4,
         "w": 3,
-        "x": 15,
+        "x": 14,
         "y": 1
       },
       "targets": [
@@ -644,7 +577,8 @@
           "fields": "",
           "values": false
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "stat",
@@ -657,7 +591,7 @@
       "gridPos": {
         "h": 4,
         "w": 3,
-        "x": 18,
+        "x": 17,
         "y": 1
       },
       "targets": [
@@ -758,7 +692,8 @@
           "fields": "",
           "values": false
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "stat",
@@ -770,8 +705,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
-        "x": 21,
+        "w": 4,
+        "x": 20,
         "y": 1
       },
       "targets": [
@@ -876,7 +811,8 @@
           "fields": "",
           "values": false
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "stat",
@@ -948,7 +884,8 @@
           "fields": "",
           "values": false
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "stat",
@@ -960,7 +897,7 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
+        "w": 4,
         "x": 12,
         "y": 5
       },
@@ -1004,7 +941,8 @@
           "fields": "",
           "values": false
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "stat",
@@ -1076,7 +1014,8 @@
           "fields": "",
           "values": false
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "stat",
@@ -1148,71 +1087,8 @@
           "fields": "",
           "values": false
         }
-      }
-    },
-    {
-      "type": "stat",
-      "title": "Power Limit",
-      "description": "100% = no limit",
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
       },
-      "gridPos": {
-        "h": 4,
-        "w": 3,
-        "x": 18,
-        "y": 5
-      },
-      "targets": [
-        {
-          "expr": "hoval_power_limit",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "fieldConfig": {
-        "defaults": {
-          "unit": "percent",
-          "decimals": 0,
-          "color": {
-            "mode": "thresholds"
-          },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#2D6A4F",
-                "value": null
-              },
-              {
-                "color": "#B8860B",
-                "value": 50
-              },
-              {
-                "color": "#C44536",
-                "value": 25
-              }
-            ]
-          },
-          "mappings": []
-        },
-        "overrides": []
-      },
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "textMode": "value",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        }
-      }
+      "transparent": true
     },
     {
       "type": "stat",
@@ -1284,7 +1160,8 @@
           "fields": "",
           "values": false
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "stat",
@@ -1296,8 +1173,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
-        "x": 15,
+        "w": 4,
+        "x": 16,
         "y": 5
       },
       "targets": [
@@ -1340,7 +1217,8 @@
           "fields": "",
           "values": false
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "stat",
@@ -1352,8 +1230,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
-        "x": 21,
+        "w": 4,
+        "x": 20,
         "y": 5
       },
       "targets": [
@@ -1414,7 +1292,8 @@
           "fields": "",
           "values": false
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "row",
@@ -1706,7 +1585,8 @@
           "mode": "multi",
           "sort": "desc"
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "timeseries",
@@ -1927,7 +1807,8 @@
           "mode": "multi",
           "sort": "desc"
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "timeseries",
@@ -1945,12 +1826,12 @@
       },
       "targets": [
         {
-          "expr": "hoval_flow_temp_hc1 - hoval_return_temp",
+          "expr": "clamp(hoval_flow_temp_hc1 - hoval_return_temp, -10, 15)",
           "legendFormat": "ΔT HC1",
           "refId": "A"
         },
         {
-          "expr": "hoval_flow_temp_hp - hoval_return_temp_hp",
+          "expr": "clamp(hoval_flow_temp_hp - hoval_return_temp_hp, -10, 15)",
           "legendFormat": "ΔT HP",
           "refId": "B"
         }
@@ -2035,7 +1916,8 @@
           "mode": "multi",
           "sort": "desc"
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "timeseries",
@@ -2053,12 +1935,12 @@
       },
       "targets": [
         {
-          "expr": "hoval_thermal_power_realtime / (hoval_electrical_power > 0)",
+          "expr": "clamp_max(hoval_thermal_power_realtime / (hoval_electrical_power > 0), 10)",
           "legendFormat": "Thermal/Elec Ratio",
           "refId": "A"
         },
         {
-          "expr": "hoval_cop_internal",
+          "expr": "clamp_max(hoval_cop_internal, 10)",
           "legendFormat": "COP (internal)",
           "refId": "B"
         },
@@ -2192,7 +2074,8 @@
           "mode": "multi",
           "sort": "desc"
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "row",
@@ -2428,7 +2311,8 @@
           "mode": "multi",
           "sort": "desc"
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "timeseries",
@@ -2449,21 +2333,6 @@
           "expr": "hoval_modulation",
           "legendFormat": "Compressor Modulation",
           "refId": "A"
-        },
-        {
-          "expr": "hoval_hp_power_pct",
-          "legendFormat": "HP Power",
-          "refId": "B"
-        },
-        {
-          "expr": "hoval_hp_power_abs_pct",
-          "legendFormat": "HP Power Abs",
-          "refId": "C"
-        },
-        {
-          "expr": "hoval_power_limit",
-          "legendFormat": "Power Limit",
-          "refId": "D"
         },
         {
           "expr": "hoval_electrical_power",
@@ -2534,69 +2403,18 @@
                   "fixedColor": "#5794F2",
                   "mode": "fixed"
                 }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "HP Power"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#C44536",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "HP Power Abs"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#B8860B",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Power Limit"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "rgba(255,107,107,0.5)",
-                  "mode": "fixed"
-                }
-              },
-              {
-                "id": "custom.lineStyle",
-                "value": {
-                  "dash": [
-                    10,
-                    10
-                  ],
-                  "fill": "dash"
-                }
               },
               {
                 "id": "custom.fillOpacity",
-                "value": 0
+                "value": 30
               },
               {
                 "id": "custom.lineWidth",
-                "value": 2
+                "value": 0
+              },
+              {
+                "id": "custom.staircase",
+                "value": true
               }
             ]
           },
@@ -2735,7 +2553,8 @@
           "mode": "multi",
           "sort": "desc"
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "row",
@@ -2758,7 +2577,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 8,
+        "w": 12,
         "x": 0,
         "y": 40
       },
@@ -2973,190 +2792,8 @@
           "mode": "multi",
           "sort": "desc"
         }
-      }
-    },
-    {
-      "type": "timeseries",
-      "title": "Modulation & Power %",
-      "description": "Compressor modulation, HP power %, absolute power %, power limit",
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
       },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 8,
-        "y": 40
-      },
-      "targets": [
-        {
-          "expr": "hoval_modulation",
-          "legendFormat": "Modulation",
-          "refId": "A",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          }
-        },
-        {
-          "expr": "hoval_hp_power_pct",
-          "legendFormat": "HP Power %",
-          "refId": "B",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          }
-        },
-        {
-          "expr": "hoval_hp_power_abs_pct",
-          "legendFormat": "HP Power Abs %",
-          "refId": "C",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          }
-        },
-        {
-          "expr": "hoval_power_limit",
-          "legendFormat": "Power Limit",
-          "refId": "D",
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          }
-        }
-      ],
-      "fieldConfig": {
-        "defaults": {
-          "unit": "percent",
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "drawStyle": "line",
-            "lineInterpolation": "smooth",
-            "lineWidth": 1,
-            "fillOpacity": 25,
-            "gradientMode": "opacity",
-            "spanNulls": true,
-            "showPoints": "never",
-            "pointSize": 5,
-            "stacking": {
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "mappings": [],
-          "min": 0,
-          "max": 100
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Modulation"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#5794F2",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "HP Power %"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#C44536",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "HP Power Abs %"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#B8860B",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Power Limit"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "rgba(255,107,107,0.5)",
-                  "mode": "fixed"
-                }
-              },
-              {
-                "id": "custom.lineStyle",
-                "value": {
-                  "dash": [
-                    10,
-                    10
-                  ],
-                  "fill": "dash"
-                }
-              },
-              {
-                "id": "custom.fillOpacity",
-                "value": 0
-              },
-              {
-                "id": "custom.lineWidth",
-                "value": 2
-              }
-            ]
-          }
-        ]
-      },
-      "options": {
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "calcs": [
-            "mean",
-            "lastNotNull"
-          ]
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "desc"
-        }
-      }
+      "transparent": true
     },
     {
       "type": "timeseries",
@@ -3168,8 +2805,8 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 8,
-        "x": 16,
+        "w": 12,
+        "x": 12,
         "y": 40
       },
       "targets": [
@@ -3325,7 +2962,8 @@
           "mode": "multi",
           "sort": "desc"
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "row",
@@ -3339,7 +2977,7 @@
       "collapsed": false
     },
     {
-      "type": "timeseries",
+      "type": "state-timeline",
       "title": "Status Codes Over Time",
       "description": "HC1: 0=Off 1=Heating 2=Comfort 3=Eco 4=Frost 12=Fault 26=SmartGrid\nDHW: 0=Off 1=Charging 8=Reduced\nHP: 0=Off 1=Heating 2=Cooling 3=Lock 4=DHW 5=Frost 8=Defrost 9=PassiveCool 51=CondPump",
       "datasource": {
@@ -3386,20 +3024,8 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "drawStyle": "line",
-            "lineInterpolation": "smooth",
-            "lineWidth": 2,
-            "fillOpacity": 0,
-            "gradientMode": "opacity",
-            "spanNulls": true,
-            "showPoints": "never",
-            "pointSize": 5,
-            "stacking": {
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "fillOpacity": 80,
+            "lineWidth": 0
           },
           "thresholds": {
             "mode": "absolute",
@@ -3421,11 +3047,49 @@
             },
             "properties": [
               {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#5794F2",
-                  "mode": "fixed"
-                }
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "0": {
+                        "text": "Off",
+                        "color": "#1F3044",
+                        "index": 0
+                      },
+                      "1": {
+                        "text": "Heating",
+                        "color": "#C44536",
+                        "index": 1
+                      },
+                      "2": {
+                        "text": "Comfort",
+                        "color": "#B8860B",
+                        "index": 2
+                      },
+                      "3": {
+                        "text": "Eco",
+                        "color": "#2D6A4F",
+                        "index": 3
+                      },
+                      "4": {
+                        "text": "Frost Prot.",
+                        "color": "#3A7CA5",
+                        "index": 4
+                      },
+                      "9": {
+                        "text": "Cooling",
+                        "color": "#5794F2",
+                        "index": 5
+                      },
+                      "10": {
+                        "text": "Comfort Cool",
+                        "color": "#00B5AD",
+                        "index": 6
+                      }
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -3436,11 +3100,44 @@
             },
             "properties": [
               {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#FF9830",
-                  "mode": "fixed"
-                }
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "0": {
+                        "text": "Off",
+                        "color": "#1F3044",
+                        "index": 0
+                      },
+                      "1": {
+                        "text": "Charging",
+                        "color": "#5C8A4F",
+                        "index": 1
+                      },
+                      "2": {
+                        "text": "Comfort",
+                        "color": "#B8860B",
+                        "index": 2
+                      },
+                      "5": {
+                        "text": "Fault",
+                        "color": "#C44536",
+                        "index": 3
+                      },
+                      "6": {
+                        "text": "Draw-off",
+                        "color": "#5794F2",
+                        "index": 4
+                      },
+                      "8": {
+                        "text": "Reduced",
+                        "color": "#8B6914",
+                        "index": 5
+                      }
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -3451,11 +3148,54 @@
             },
             "properties": [
               {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#C44536",
-                  "mode": "fixed"
-                }
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "0": {
+                        "text": "Off",
+                        "color": "#1F3044",
+                        "index": 0
+                      },
+                      "1": {
+                        "text": "Heating",
+                        "color": "#C44536",
+                        "index": 1
+                      },
+                      "2": {
+                        "text": "Cooling",
+                        "color": "#3A7CA5",
+                        "index": 2
+                      },
+                      "3": {
+                        "text": "DHW+Heat",
+                        "color": "#B8860B",
+                        "index": 3
+                      },
+                      "4": {
+                        "text": "DHW",
+                        "color": "#5C8A4F",
+                        "index": 4
+                      },
+                      "5": {
+                        "text": "Idle",
+                        "color": "#4A5568",
+                        "index": 5
+                      },
+                      "8": {
+                        "text": "Defrost",
+                        "color": "#FF9830",
+                        "index": 6
+                      },
+                      "51": {
+                        "text": "Pre-heat",
+                        "color": "#5794F2",
+                        "index": 7
+                      }
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -3466,11 +3206,24 @@
             },
             "properties": [
               {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#73BF69",
-                  "mode": "fixed"
-                }
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "0": {
+                        "text": "Off",
+                        "color": "#1F3044",
+                        "index": 0
+                      },
+                      "1": {
+                        "text": "On",
+                        "color": "#5C8A4F",
+                        "index": 1
+                      }
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -3481,30 +3234,44 @@
             },
             "properties": [
               {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#B8860B",
-                  "mode": "fixed"
-                }
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "0": {
+                        "text": "Off",
+                        "color": "#1F3044",
+                        "index": 0
+                      },
+                      "1": {
+                        "text": "Active",
+                        "color": "#5C8A4F",
+                        "index": 1
+                      }
+                    }
+                  }
+                ]
               }
             ]
           }
         ]
       },
       "options": {
+        "mergeValues": true,
+        "showValue": "auto",
+        "alignValue": "left",
         "legend": {
           "displayMode": "list",
-          "placement": "bottom",
-          "calcs": [
-            "mean",
-            "lastNotNull"
-          ]
+          "placement": "bottom"
         },
         "tooltip": {
-          "mode": "multi",
-          "sort": "desc"
-        }
-      }
+          "mode": "single",
+          "sort": "none"
+        },
+        "rowHeight": 0.8
+      },
+      "transparent": true
     },
     {
       "type": "state-timeline",
@@ -3670,10 +3437,11 @@
           "mode": "single",
           "sort": "none"
         }
-      }
+      },
+      "transparent": true
     },
     {
-      "type": "timeseries",
+      "type": "state-timeline",
       "title": "Error Registers",
       "description": "0xFF (255) = no error",
       "datasource": {
@@ -3705,20 +3473,8 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "drawStyle": "line",
-            "lineInterpolation": "smooth",
-            "lineWidth": 2,
-            "fillOpacity": 0,
-            "gradientMode": "opacity",
-            "spanNulls": true,
-            "showPoints": "never",
-            "pointSize": 5,
-            "stacking": {
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "fillOpacity": 80,
+            "lineWidth": 0
           },
           "thresholds": {
             "mode": "absolute",
@@ -3740,11 +3496,36 @@
             },
             "properties": [
               {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#5794F2",
-                  "mode": "fixed"
-                }
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "255": {
+                        "text": "OK",
+                        "color": "#2D6A4F",
+                        "index": 0
+                      },
+                      "0": {
+                        "text": "Error 0",
+                        "color": "#C44536",
+                        "index": 1
+                      }
+                    }
+                  },
+                  {
+                    "type": "range",
+                    "options": {
+                      "from": 0,
+                      "to": 254,
+                      "result": {
+                        "text": "Error",
+                        "color": "#C44536",
+                        "index": 2
+                      }
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -3755,30 +3536,56 @@
             },
             "properties": [
               {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#FF9830",
-                  "mode": "fixed"
-                }
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "255": {
+                        "text": "OK",
+                        "color": "#2D6A4F",
+                        "index": 0
+                      },
+                      "0": {
+                        "text": "Error 0",
+                        "color": "#C44536",
+                        "index": 1
+                      }
+                    }
+                  },
+                  {
+                    "type": "range",
+                    "options": {
+                      "from": 0,
+                      "to": 254,
+                      "result": {
+                        "text": "Error",
+                        "color": "#C44536",
+                        "index": 2
+                      }
+                    }
+                  }
+                ]
               }
             ]
           }
         ]
       },
       "options": {
+        "mergeValues": true,
+        "showValue": "auto",
+        "alignValue": "left",
         "legend": {
           "displayMode": "list",
-          "placement": "bottom",
-          "calcs": [
-            "mean",
-            "lastNotNull"
-          ]
+          "placement": "bottom"
         },
         "tooltip": {
-          "mode": "multi",
-          "sort": "desc"
-        }
-      }
+          "mode": "single",
+          "sort": "none"
+        },
+        "rowHeight": 0.8
+      },
+      "transparent": true
     },
     {
       "type": "row",
@@ -3825,16 +3632,6 @@
           "expr": "hoval_room_setpoint_hc1",
           "legendFormat": "Active Room Setpoint",
           "refId": "D"
-        },
-        {
-          "expr": "hoval_flow_setpoint_const_hc1",
-          "legendFormat": "Flow Const Mode",
-          "refId": "E"
-        },
-        {
-          "expr": "hoval_storage_setpoint",
-          "legendFormat": "Storage Tank",
-          "refId": "F"
         }
       ],
       "fieldConfig": {
@@ -3934,36 +3731,6 @@
                 "value": 2
               }
             ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Flow Const Mode"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#B8860B",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Storage Tank"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#3A7CA5",
-                  "mode": "fixed"
-                }
-              }
-            ]
           }
         ]
       },
@@ -3980,7 +3747,8 @@
           "mode": "multi",
           "sort": "desc"
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "timeseries",
@@ -4016,6 +3784,15 @@
           "expr": "hoval_fa_flow_setpoint",
           "legendFormat": "FA Flow Setpoint",
           "refId": "D"
+        },
+        {
+          "expr": "hoval_storage_setpoint",
+          "legendFormat": "Storage Tank",
+          "refId": "E",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
         }
       ],
       "fieldConfig": {
@@ -4115,6 +3892,39 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Storage Tank"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#8B6914",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4,
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              }
+            ]
           }
         ]
       },
@@ -4131,7 +3941,8 @@
           "mode": "multi",
           "sort": "desc"
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "row",
@@ -4160,14 +3971,18 @@
       },
       "targets": [
         {
-          "expr": "hoval_operating_hours",
-          "legendFormat": "Operating Hours",
-          "refId": "A"
+          "expr": "increase(hoval_operating_hours[1d]) / 3600",
+          "legendFormat": "Op Hours / day",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
         }
       ],
       "fieldConfig": {
         "defaults": {
-          "unit": "h",
+          "unit": "hours",
           "color": {
             "mode": "palette-classic"
           },
@@ -4229,7 +4044,8 @@
           "mode": "multi",
           "sort": "desc"
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "timeseries",
@@ -4247,14 +4063,18 @@
       },
       "targets": [
         {
-          "expr": "hoval_switching_cycles",
-          "legendFormat": "Switching Cycles",
-          "refId": "A"
+          "expr": "increase(hoval_switching_cycles[1d])",
+          "legendFormat": "Cycles / day",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
         }
       ],
       "fieldConfig": {
         "defaults": {
-          "unit": "short",
+          "unit": "none",
           "color": {
             "mode": "palette-classic"
           },
@@ -4316,7 +4136,8 @@
           "mode": "multi",
           "sort": "desc"
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "timeseries",
@@ -4334,14 +4155,18 @@
       },
       "targets": [
         {
-          "expr": "hoval_thermal_energy",
-          "legendFormat": "Thermal Energy",
-          "refId": "A"
+          "expr": "increase(hoval_thermal_energy[1d])",
+          "legendFormat": "Thermal kWh / day",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
         }
       ],
       "fieldConfig": {
         "defaults": {
-          "unit": "MWh",
+          "unit": "kwatth",
           "color": {
             "mode": "palette-classic"
           },
@@ -4404,7 +4229,8 @@
           "mode": "multi",
           "sort": "desc"
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "timeseries",
@@ -4422,14 +4248,18 @@
       },
       "targets": [
         {
-          "expr": "hoval_electrical_energy_total",
-          "legendFormat": "Electrical Energy (MWh)",
-          "refId": "A"
+          "expr": "increase(hoval_electrical_energy_total[1d])",
+          "legendFormat": "Elec kWh / day",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
         }
       ],
       "fieldConfig": {
         "defaults": {
-          "unit": "MWh",
+          "unit": "kwatth",
           "color": {
             "mode": "palette-classic"
           },
@@ -4491,7 +4321,8 @@
           "mode": "multi",
           "sort": "desc"
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "timeseries",
@@ -4509,14 +4340,18 @@
       },
       "targets": [
         {
-          "expr": "hoval_compressor_starts",
-          "legendFormat": "Compressor Starts",
-          "refId": "A"
+          "expr": "increase(hoval_compressor_starts[1d])",
+          "legendFormat": "Starts / day",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
         }
       ],
       "fieldConfig": {
         "defaults": {
-          "unit": "short",
+          "unit": "none",
           "color": {
             "mode": "palette-classic"
           },
@@ -4578,7 +4413,8 @@
           "mode": "multi",
           "sort": "desc"
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "timeseries",
@@ -4596,7 +4432,7 @@
       },
       "targets": [
         {
-          "expr": "hoval_cop_internal",
+          "expr": "clamp_max(hoval_cop_internal, 10)",
           "legendFormat": "COP",
           "refId": "A"
         },
@@ -4687,7 +4523,8 @@
           "mode": "multi",
           "sort": "desc"
         }
-      }
+      },
+      "transparent": true
     },
     {
       "type": "row",
@@ -4758,7 +4595,8 @@
               "fields": "",
               "values": false
             }
-          }
+          },
+          "transparent": true
         },
         {
           "type": "timeseries",
@@ -4906,7 +4744,8 @@
               "mode": "multi",
               "sort": "desc"
             }
-          }
+          },
+          "transparent": true
         },
         {
           "type": "timeseries",
@@ -5021,7 +4860,8 @@
               "mode": "multi",
               "sort": "desc"
             }
-          }
+          },
+          "transparent": true
         }
       ]
     }

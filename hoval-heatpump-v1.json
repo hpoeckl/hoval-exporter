@@ -1230,8 +1230,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 4,
-        "x": 20,
+        "w": 2,
+        "x": 22,
         "y": 5
       },
       "targets": [
@@ -4864,6 +4864,105 @@
           "transparent": true
         }
       ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "Weather",
+                  "color": "blue",
+                  "index": 0
+                },
+                "1": {
+                  "text": "Weather+Room",
+                  "color": "green",
+                  "index": 1
+                },
+                "2": {
+                  "text": "Room",
+                  "color": "orange",
+                  "index": 2
+                },
+                "3": {
+                  "text": "Constant",
+                  "color": "yellow",
+                  "index": 3
+                },
+                "4": {
+                  "text": "W+Const Cool",
+                  "color": "purple",
+                  "index": 4
+                },
+                "5": {
+                  "text": "W+R+Const Cool",
+                  "color": "red",
+                  "index": 5
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 20,
+        "y": 5
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "values": false,
+          "fields": "",
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "textMode": "value"
+      },
+      "pluginVersion": "8.0.0",
+      "targets": [
+        {
+          "expr": "hoval_control_strategy_hc1",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
+        }
+      ],
+      "title": "Strategy",
+      "transparent": true,
+      "type": "stat"
     }
   ],
   "__inputs": [

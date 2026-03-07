@@ -62,7 +62,7 @@ BROADCAST_ADDR = 0x0FFF  # device_type=0x0F, device_id=0xFF
 MULTIFRAME_START = 0x1F400FFF  # Start frame: [flags][seq][op][fg][fn][dp_hi][dp_lo][data_0]
 MULTIFRAME_CONT  = 0x1E800FFF  # Continuation:  [seq][data_1][data_2][data_3][crc_hi][crc_lo]
 
-VERSION = "1.7.0"
+VERSION = "1.8.0"
 
 
 # ---------------------------------------------------------------------------
@@ -161,13 +161,15 @@ DEFAULT_DATAPOINTS = [
     DatapointDef("cop_internal",           60,254,    45, "U8",  1, "ratio",   "Coefficient of performance (COP)"),
     # dp 23008 = "Total energy efficiency H-Gen" (= SPF / Jahresarbeitszahl)
     DatapointDef("spf",                    10,  1, 23008, "U8",  1, "ratio",   "Seasonal performance factor (SPF)"),
-
     # Additional temperatures — dp 84/85 at fg=60/fn=254 per Modbus xlsx
     DatapointDef("evaporator_inlet_temp",  60,254,    84, "S16", 1, "celsius", "Evaporator inlet / source flow temperature"),
     DatapointDef("evaporator_surface_temp",60,254,    85, "S16", 1, "celsius", "Evaporator surface / source return temperature"),
 
     # Pump speeds and flow — removed: hp_pump_speed (dp 1022), main_pump_speed (dp 22),
     # flow_rate (dp 21105), hp_power_setpoint (dp 1009) — all return 0 on Belaria Pro 13
+
+    # Control parameters
+    DatapointDef("control_strategy_hc1",    1,  0,  3032, "U8",  0, "status",  "Control strategy HC1 (0=weather,1=weather+room,2=room,3=const,4=weather+const-cool,5=weather+room+const-cool)"),
 
     # SmartGrid
     DatapointDef("smartgrid_status",        0,  0, 21090, "U8",  0, "status",  "Smart Grid status (0=normal,1=preferred,2=blocked,3=forced,255=inactive)"),

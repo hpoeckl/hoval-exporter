@@ -8,7 +8,7 @@ using the TopTronic E controller family — datapoint IDs may vary.
 
 ## Features
 
-- Active polling of 48 datapoints (temperatures, setpoints, status, power, COP, errors)
+- Active polling of 49 datapoints (temperatures, setpoints, status, power, COP, errors)
 - Internal COP + SPF from heat pump (no external power meter needed)
 - Passive decoding of multi-frame U32 responses (operating hours, thermal energy)
 - Own CAN address (`msg_id=6`) to avoid collisions with the Hoval Gateway
@@ -271,7 +271,19 @@ U32 value = [data_0, data_1, data_2, data_3] big-endian
 | `hoval_fa_defrost_demand`    | 60  | 254 | 22    | S16  | 1   | Defrost demand / evaporator |
 | `hoval_error_hc1`            | 1   | 0   | 500   | U8   | 0   | Error register HC1 (0xFF=ok) |
 | `hoval_error_dhw`            | 2   | 0   | 500   | U8   | 0   | Error register DHW (0xFF=ok) |
+| `hoval_control_strategy_hc1`  |  1 |  0 |  3032 | U8   |   0 | Control strategy HC1               |
 | `hoval_smartgrid_status`      |  0 |  0 | 21090 | U8   |   0 | Smart Grid status                  |
+
+#### Control strategy (`control_strategy_hc1`, dp 3032)
+
+| Code | Strategy                                  |
+|------|-------------------------------------------|
+|    0 | Pure weather-compensated                  |
+|    1 | Weather + room feedback                   |
+|    2 | Pure room control                         |
+|    3 | Constant flow temperature                 |
+|    4 | Weather heating + constant cooling        |
+|    5 | Weather + room heating + constant cooling |
 
 #### Heating circuit status codes
 
@@ -463,7 +475,7 @@ The dashboard includes:
 | `hoval_modulation`           | 0 to 100 %     | 0 when idle            |
 | `hoval_condenser_temp`       | 25 to 60 °C    | > return temp when running |
 | `hoval_electrical_power`    | 0 to 4 kW      | 0 when idle, ~1-3.5 kW typical |
-| `hoval_cop_internal`        | 0 to 8         | 3-5 typical for air-source HP  |
+| `hoval_cop_internal`        | 0 to 8         | U8 dec=1, 3-5 typical for air-source HP |
 | `hoval_spf`                 | 0 to 8         | 3.5-5.0 seasonal average       |
 
 ### CAN bus errors

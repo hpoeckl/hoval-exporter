@@ -1,6 +1,6 @@
 {
-  "uid": "hoval-heatpump-v1",
-  "title": "Hoval Heat Pump v1.0",
+  "uid": "hoval-heatpump-v2",
+  "title": "Hoval Heat Pump v2.0",
   "description": "Hoval Belaria Pro 13 — CAN-Bus monitoring via hoval-exporter",
   "schemaVersion": 42,
   "version": 1,
@@ -54,7 +54,7 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
+        "w": 2,
         "x": 0,
         "y": 1
       },
@@ -123,6 +123,83 @@
     },
     {
       "type": "stat",
+      "title": "Room",
+      "description": "",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 2,
+        "y": 1
+      },
+      "targets": [
+        {
+          "expr": "hoval_room_temp_hc1",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#1F3044",
+                "value": null
+              },
+              {
+                "color": "#3A7CA5",
+                "value": 15
+              },
+              {
+                "color": "#2D6A4F",
+                "value": 19
+              },
+              {
+                "color": "#5C8A4F",
+                "value": 21
+              },
+              {
+                "color": "#B8860B",
+                "value": 24
+              },
+              {
+                "color": "#C44536",
+                "value": 28
+              }
+            ]
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "textMode": "value",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "transparent": true
+    },
+    {
+      "type": "stat",
       "title": "Flow HC1",
       "description": "",
       "datasource": {
@@ -131,8 +208,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
-        "x": 3,
+        "w": 2,
+        "x": 4,
         "y": 1
       },
       "targets": [
@@ -4528,12 +4605,644 @@
     },
     {
       "type": "row",
-      "title": "🔧 Exporter Health",
+      "title": "✏️ Writable Values (Importer)",
+      "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
         "y": 75
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Strategy",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 0,
+        "y": 76
+      },
+      "targets": [
+        {
+          "expr": "hoval_control_strategy_hc1",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "textMode": "auto",
+        "reduceOptions": {
+          "values": false,
+          "fields": "",
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#1F3044",
+                "value": null
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "Weather",
+                  "color": "#2D6A4F",
+                  "index": 0
+                },
+                "1": {
+                  "text": "W+Room",
+                  "color": "#5C8A4F",
+                  "index": 1
+                },
+                "2": {
+                  "text": "Room",
+                  "color": "orange",
+                  "index": 2
+                },
+                "3": {
+                  "text": "Constant",
+                  "color": "yellow",
+                  "index": 3
+                },
+                "4": {
+                  "text": "W+Const Cool",
+                  "color": "purple",
+                  "index": 4
+                },
+                "5": {
+                  "text": "W+R+Const Cool",
+                  "color": "red",
+                  "index": 5
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "transparent": true,
+      "description": "0=Weather, 1=Weather+Room, 2=Room, 3=Constant, 4=Weather+Const Cool, 5=Weather+Room+Const Cool"
+    },
+    {
+      "type": "stat",
+      "title": "Room Temp",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 3,
+        "y": 76
+      },
+      "targets": [
+        {
+          "expr": "hoval_room_temp_hc1",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "textMode": "auto",
+        "reduceOptions": {
+          "values": false,
+          "fields": "",
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#1F3044",
+                "value": null
+              }
+            ]
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "transparent": true,
+      "description": "Sensor value override (5–35 °C)"
+    },
+    {
+      "type": "stat",
+      "title": "Comfort Room SP",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 5,
+        "y": 76
+      },
+      "targets": [
+        {
+          "expr": "hoval_comfort_room_setpoint_hc1",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "textMode": "auto",
+        "reduceOptions": {
+          "values": false,
+          "fields": "",
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#1F3044",
+                "value": null
+              }
+            ]
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "transparent": true,
+      "description": "Comfort room setpoint (10–30 °C)"
+    },
+    {
+      "type": "stat",
+      "title": "Eco Room SP",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 8,
+        "y": 76
+      },
+      "targets": [
+        {
+          "expr": "hoval_eco_room_setpoint_hc1",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "textMode": "auto",
+        "reduceOptions": {
+          "values": false,
+          "fields": "",
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#1F3044",
+                "value": null
+              }
+            ]
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "transparent": true,
+      "description": "Eco room setpoint (5–20 °C)"
+    },
+    {
+      "type": "stat",
+      "title": "Cool Room SP",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 11,
+        "y": 76
+      },
+      "targets": [
+        {
+          "expr": "hoval_cooling_room_setpoint_hc1",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "textMode": "auto",
+        "reduceOptions": {
+          "values": false,
+          "fields": "",
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#1F3044",
+                "value": null
+              }
+            ]
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "transparent": true,
+      "description": "Cooling room setpoint (10–30 °C)"
+    },
+    {
+      "type": "stat",
+      "title": "Mode HC1",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 14,
+        "y": 76
+      },
+      "targets": [
+        {
+          "expr": "hoval_operating_mode_hc1",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "textMode": "auto",
+        "reduceOptions": {
+          "values": false,
+          "fields": "",
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#1F3044",
+                "value": null
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "Standby",
+                  "color": "#4A5568",
+                  "index": 0
+                },
+                "1": {
+                  "text": "Woche 1",
+                  "color": "#2D6A4F",
+                  "index": 1
+                },
+                "2": {
+                  "text": "Woche 2",
+                  "color": "#5C8A4F",
+                  "index": 2
+                },
+                "4": {
+                  "text": "Constant",
+                  "color": "#B8860B",
+                  "index": 3
+                },
+                "5": {
+                  "text": "Eco",
+                  "color": "#3A7CA5",
+                  "index": 4
+                },
+                "7": {
+                  "text": "Manual Heat",
+                  "color": "#C44536",
+                  "index": 5
+                },
+                "8": {
+                  "text": "Manual Cool",
+                  "color": "#5794F2",
+                  "index": 6
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "transparent": true,
+      "description": "0=Standby, 1=Woche 1, 2=Woche 2, 4=Constant, 5=Eco, 7=Manual Heat, 8=Manual Cool"
+    },
+    {
+      "type": "stat",
+      "title": "Comfort DHW SP",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 16,
+        "y": 76
+      },
+      "targets": [
+        {
+          "expr": "hoval_comfort_dhw_setpoint",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "textMode": "auto",
+        "reduceOptions": {
+          "values": false,
+          "fields": "",
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#1F3044",
+                "value": null
+              }
+            ]
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "transparent": true,
+      "description": "Comfort hot water setpoint (10–70 °C)"
+    },
+    {
+      "type": "stat",
+      "title": "Eco DHW SP",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 19,
+        "y": 76
+      },
+      "targets": [
+        {
+          "expr": "hoval_eco_dhw_setpoint",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "textMode": "auto",
+        "reduceOptions": {
+          "values": false,
+          "fields": "",
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#1F3044",
+                "value": null
+              }
+            ]
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "transparent": true,
+      "description": "Eco hot water setpoint (10–70 °C)"
+    },
+    {
+      "type": "stat",
+      "title": "Mode DHW",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 22,
+        "y": 76
+      },
+      "targets": [
+        {
+          "expr": "hoval_operating_mode_dhw",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "textMode": "auto",
+        "reduceOptions": {
+          "values": false,
+          "fields": "",
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#1F3044",
+                "value": null
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "Standby",
+                  "color": "#4A5568",
+                  "index": 0
+                },
+                "1": {
+                  "text": "Woche 1",
+                  "color": "#2D6A4F",
+                  "index": 1
+                },
+                "2": {
+                  "text": "Woche 2",
+                  "color": "#5C8A4F",
+                  "index": 2
+                },
+                "4": {
+                  "text": "Constant",
+                  "color": "#B8860B",
+                  "index": 3
+                },
+                "6": {
+                  "text": "Eco",
+                  "color": "#3A7CA5",
+                  "index": 4
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "transparent": true,
+      "description": "0=Standby, 1=Woche 1, 2=Woche 2, 4=Constant, 6=Eco"
+    },
+    {
+      "type": "row",
+      "title": "🔧 Exporter Health",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 80
       },
       "collapsed": true,
       "panels": [
@@ -4549,7 +5258,7 @@
             "h": 8,
             "w": 3,
             "x": 0,
-            "y": 76
+            "y": 81
           },
           "targets": [
             {
@@ -4610,7 +5319,7 @@
             "h": 8,
             "w": 11,
             "x": 3,
-            "y": 76
+            "y": 81
           },
           "targets": [
             {
@@ -4759,7 +5468,7 @@
             "h": 8,
             "w": 10,
             "x": 14,
-            "y": 76
+            "y": 81
           },
           "targets": [
             {
@@ -4962,7 +5671,8 @@
       ],
       "title": "Strategy",
       "transparent": true,
-      "type": "stat"
+      "type": "stat",
+      "description": "0=Weather, 1=Weather+Room, 2=Room, 3=Constant, 4=Weather+Const Cool, 5=Weather+Room+Const Cool"
     }
   ],
   "__inputs": [

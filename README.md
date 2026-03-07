@@ -1,7 +1,8 @@
 # Hoval CAN-Bus Prometheus Exporter
 
-Reads Hoval heat pump data via CAN-Bus (TopTronic E protocol)
-and exposes Prometheus metrics for scraping by VictoriaMetrics, Prometheus, or similar.
+Reads and writes Hoval heat pump data via CAN-Bus (TopTronic E protocol).
+The **exporter** polls datapoints and exposes Prometheus metrics. The **importer**
+provides an HTTP API for writing setpoints and parameters back to the controller.
 
 Tested with **Hoval Belaria Pro 13** (TTE-WEZ). Should work with other Hoval heat pumps
 using the TopTronic E controller family — datapoint IDs may vary.
@@ -431,7 +432,7 @@ Datapoint IDs can also be found in the
 
 ## Grafana Dashboard
 
-A pre-built dashboard is included: `hoval-heatpump-v1.json`
+A pre-built dashboard is included: `hoval-heatpump-v2.json`
 
 Import in Grafana: **Dashboards → Import → Upload JSON file**, then select
 your Prometheus/VictoriaMetrics datasource when prompted.
@@ -484,6 +485,101 @@ If `poll_errors_total` increases:
 - CAN bus overloaded → increase `poll_delay`
 - Wiring issue → check H/L not swapped, GND connected
 - Termination mismatch → check adapter termination resistor setting
+
+## Write API (Importer)
+
+A separate HTTP service for writing datapoints to the heat pump via CAN-Bus.
+Runs alongside the exporter on its own port (default: 9102) with its own CAN identity (`msg_id=7`).
+
+### Quick start
+
+```bash
+# Default (localhost only, Tier 1+2 datapoints)
+python3 hoval-importer.py
+
+# With advanced datapoints (heating curve, power limits)
+python3 hoval-importer.py --enable-advanced
+
+# Dry-run (validate only, no CAN writes)
+python3 hoval-importer.py --dry-run
+```
+
+### Write a value
+
+```bash
+curl -X POST http://localhost:9102/api/write \
+  -H "Content-Type: application/json" \
+  -d '{"name": "room_temp_hc1", "value": 21.5}'
+```
+
+### List available datapoints
+
+```bash
+curl http://localhost:9102/api/datapoints
+```
+
+### Writable datapoints
+
+Datapoints are grouped into tiers. Tier 3 requires `--enable-advanced`.
+
+| Tier | Name | fg | fn | dp | Type | Range | Unit |
+|------|------|----|----|-----|------|-------|------|
+| 1 | `room_temp_hc1` | 1 | 0 | 1 | S16 | 5–35 | °C |
+| 1 | `control_strategy_hc1` | 1 | 0 | 3032 | U8 | 0–5 | enum |
+| 2 | `comfort_room_setpoint_hc1` | 1 | 0 | 3051 | S16 | 10–30 | °C |
+| 2 | `eco_room_setpoint_hc1` | 1 | 0 | 3053 | S16 | 5–20 | °C |
+| 2 | `cooling_room_setpoint_hc1` | 1 | 0 | 3054 | S16 | 10–30 | °C |
+| 2 | `comfort_dhw_setpoint` | 2 | 0 | 5051 | S16 | 10–70 | °C |
+| 2 | `eco_dhw_setpoint` | 2 | 0 | 5086 | U8 | 10–70 | °C |
+| 2 | `operating_mode_hc1` | 1 | 0 | 3050 | U8 | 0–8 | enum |
+| 2 | `operating_mode_dhw` | 2 | 0 | 5050 | U8 | 0–6 | enum |
+| 3 | `heating_curve_base_temp` | 1 | 0 | 3001 | S16 | 0–90 | °C |
+| 3 | `heating_curve_design_temp` | 1 | 0 | 3013 | S16 | 10–90 | °C |
+| 3 | `heating_limit_outdoor` | 1 | 0 | 3021 | S16 | -10–50 | °C |
+| 3 | `max_power` | 0 | 0 | 1208 | U16 | 0–10000 | kW |
+| 3 | `power_limit_factor` | 0 | 0 | 1209 | U8 | 0–100 | % |
+
+### CAN SET frame format
+
+Discovered by sniffing the Hoval Gateway's SET frames on the CAN bus:
+
+```
+Arb ID:  0x07E40801  (msg_id=7, priority=0xE4, dev_type=8, dev_id=1)
+Payload: [0x01][0x46][fg][fn][dp_hi][dp_lo][data...]
+          │     │     │   │   └─────────────── datapoint + value
+          │     │     └───┴─── function group / number
+          │     └── SET_REQUEST operation
+          └── single-frame marker (same as GET)
+```
+
+> **Key discovery:** The length byte is `0x01` for all single-frame SET requests,
+> regardless of data size. This matches the Gateway's observed behavior and differs
+> from what the bit-field encoding (upper 5 bits = length) would suggest.
+
+### Safety features
+
+The importer validates all writes before sending:
+
+- Value range checks per datapoint (from official Hoval XLSX)
+- Rate limiting: max 1 write/second per datapoint
+- Tier system: advanced parameters locked behind `--enable-advanced`
+- Binds to `127.0.0.1` by default (no remote access without explicit config)
+
+### Systemd service
+
+```bash
+sudo cp hoval-importer.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now hoval-importer.service
+```
+
+### Known CAN bus identities
+
+| Arb ID | msg_id | Device |
+|--------|--------|--------|
+| `0x05E40801` | 5 | Hoval Gateway |
+| `0x06E40801` | 6 | Exporter (read) |
+| `0x07E40801` | 7 | Importer (write) |
 
 ## References
 

@@ -62,7 +62,7 @@ BROADCAST_ADDR = 0x0FFF  # device_type=0x0F, device_id=0xFF
 MULTIFRAME_START = 0x1F400FFF  # Start frame: [flags][seq][op][fg][fn][dp_hi][dp_lo][data_0]
 MULTIFRAME_CONT  = 0x1E800FFF  # Continuation:  [seq][data_1][data_2][data_3][crc_hi][crc_lo]
 
-VERSION = "1.8.0"
+VERSION = "2.0.0"
 
 
 # ---------------------------------------------------------------------------
@@ -132,7 +132,7 @@ DEFAULT_DATAPOINTS = [
     # Additional datapoints discovered on bus (from Gateway polling)
     DatapointDef("mixed_flow_temp_hc1",  1,  0,     0, "S16", 1, "celsius", "Mixed flow temperature heating circuit 1"),
     DatapointDef("flow_setpoint_hc1",    1,  0,  1002, "S16", 1, "celsius", "Flow setpoint heating circuit 1"),
-    DatapointDef("operating_mode_hc1",   1,  0,  3050, "U8",  0, "status",  "Operating mode heating circuit 1"),
+    DatapointDef("operating_mode_hc1",   1,  0,  3050, "U8",  0, "status",  "Operating mode HC1 (0=standby,1=week1,2=week2,4=const,5=eco,7=manual-heat,8=manual-cool)"),
     DatapointDef("eco_room_setpoint_hc1",   1,  0,  3053, "S16", 1, "celsius", "Eco room setpoint heating circuit 1"),
     DatapointDef("comfort_room_setpoint_hc1", 1, 0, 3051, "S16", 1, "celsius", "Comfort room setpoint heating circuit 1"),
     DatapointDef("cooling_room_setpoint_hc1", 1, 0, 3054, "S16", 1, "celsius", "Cooling room setpoint heating circuit 1"),
@@ -140,7 +140,7 @@ DEFAULT_DATAPOINTS = [
     DatapointDef("error_hc1",            1,  0,   500, "U8",  0, "status",  "Error register heating circuit 1 (0xFF=ok)"),
     DatapointDef("dhw_storage_bottom",   2,  0,     6, "S16", 1, "celsius", "Domestic hot water storage bottom sensor"),
     DatapointDef("error_dhw",            2,  0,   500, "U8",  0, "status",  "Error register domestic hot water (0xFF=ok)"),
-    DatapointDef("operating_mode_dhw",   2,  0,  5050, "U8",  0, "status",  "Operating mode domestic hot water"),
+    DatapointDef("operating_mode_dhw",   2,  0,  5050, "U8",  0, "status",  "Operating mode DHW (0=standby,1=week1,2=week2,4=const,6=eco)"),
     DatapointDef("comfort_dhw_setpoint", 2,  0,  5051, "S16", 1, "celsius", "Comfort hot water setpoint"),
     DatapointDef("eco_dhw_setpoint",     2,  0,  5086, "U8",  0, "celsius", "Eco hot water setpoint"),
     DatapointDef("flow_temp_hp",        10,  1,     7, "S16", 1, "celsius", "Flow temperature heat producer"),

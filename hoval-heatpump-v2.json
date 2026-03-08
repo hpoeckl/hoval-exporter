@@ -2012,7 +2012,7 @@
       },
       "targets": [
         {
-          "expr": "clamp_max(hoval_thermal_power_realtime / (hoval_electrical_power > 0), 10)",
+          "expr": "clamp_min(clamp_max(hoval_thermal_power_realtime / (hoval_electrical_power + (hoval_electrical_power == bool 0)), 10), 0) * (hoval_electrical_power > bool 0)",
           "legendFormat": "Thermal/Elec Ratio",
           "refId": "A"
         },

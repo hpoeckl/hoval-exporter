@@ -2660,8 +2660,8 @@
       },
       "targets": [
         {
-          "expr": "hoval_fa_defrost_demand",
-          "legendFormat": "Defrost Demand",
+          "expr": "hoval_fa_heating_setpoint",
+          "legendFormat": "FA Heating Setpoint",
           "refId": "A"
         },
         {
@@ -4403,7 +4403,7 @@
     },
     {
       "type": "timeseries",
-      "title": "Compressor Starts",
+      "title": "HP Detail Status",
       "description": "",
       "datasource": {
         "type": "prometheus",
@@ -4417,8 +4417,8 @@
       },
       "targets": [
         {
-          "expr": "increase(hoval_compressor_starts[1d])",
-          "legendFormat": "Starts / day",
+          "expr": "hoval_hp_detail_status",
+          "legendFormat": "HP Detail Status",
           "refId": "A",
           "datasource": {
             "type": "prometheus",

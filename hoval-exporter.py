@@ -76,7 +76,7 @@ class DatapointDef:
     function_group: int
     function_number: int
     datapoint_id: int
-    dtype: str          # S16, U8, U16, U32, S32, LIST
+    dtype: str          # S8, S16, U8, U16, U32, S32, LIST
     decimal: int = 0
     unit: str = ""
     description: str = ""
@@ -92,7 +92,7 @@ class DatapointDef:
 
 # ---------------------------------------------------------------------------
 # Default datapoint registry — Hoval Belaria Pro 13 (WEZ, Unit ID 1)
-# Source: hoval-gateway/docs/datapoints.csv, WEZ rows
+# Source: TTE-GW-Modbus-datapoints.xlsx V2-11-12, sheet "English", UnitName=WEZ, UnitId=1
 # ---------------------------------------------------------------------------
 
 DEFAULT_DATAPOINTS = [
@@ -114,8 +114,8 @@ DEFAULT_DATAPOINTS = [
 
     # Power / Modulation
     DatapointDef("modulation",             10,  1, 20052, "U8",  0, "percent", "Compressor modulation"),
-    DatapointDef("hp_power_pct",           60,254,    30, "S16", 0, "percent", "Heat producer power"),
-    DatapointDef("hp_power_abs_pct",       60,254,    31, "S16", 0, "percent", "Heat producer absolute power"),
+    DatapointDef("hp_power_pct",           60,254,    30, "U8",  0, "percent", "Heat producer power (WEZ output)"),
+    DatapointDef("hp_power_abs_pct",       60,254,    31, "U8",  0, "percent", "Heat producer absolute power"),
     DatapointDef("power_limit",            60,254,     8, "S16", 1, "percent", "Power limit"),
 
     # Status
@@ -144,16 +144,16 @@ DEFAULT_DATAPOINTS = [
     DatapointDef("comfort_dhw_setpoint", 2,  0,  5051, "S16", 1, "celsius", "Comfort hot water setpoint"),
     DatapointDef("eco_dhw_setpoint",     2,  0,  5086, "U8",  0, "celsius", "Eco hot water setpoint"),
     DatapointDef("flow_temp_hp",        10,  1,     7, "S16", 1, "celsius", "Flow temperature heat producer"),
-    DatapointDef("flow_setpoint_hp",    10,  1,  1007, "S16", 1, "celsius", "Flow setpoint heat producer"),
+    DatapointDef("flow_setpoint_hp",    10,  1,  1007, "S16", 0, "celsius", "Flow setpoint heat producer"),
     DatapointDef("operating_status_hp", 10,  1, 20051, "U8",  0, "status",  "Heat producer operating status"),
-    DatapointDef("compressor_starts",   10,  1,  2053, "U8",  0, "count",   "Compressor starts"),
+    DatapointDef("hp_detail_status",    10,  1,  2053, "U8",  0, "status",  "Heat producer detail status (0=off,1=heating,2=active-cool,3=blocked,4=DHW,5=frost-prot,6=temp-low,7=flow-high,8=defrost,9=passive-cool)"),
     DatapointDef("condenser_temp",      10,  1, 21028, "S16", 1, "celsius", "Condenser temperature"),
     DatapointDef("evaporator_temp",     10,  1, 21029, "S16", 1, "celsius", "Evaporator temperature"),
     DatapointDef("suction_gas_temp",    10,  1, 21030, "S16", 1, "celsius", "Suction gas temperature"),
     DatapointDef("electrical_power",       10,  1, 23002, "S16", 2, "kw",     "Electrical power input heat producer"),
     DatapointDef("thermal_power_realtime", 10,  1, 23003, "S16", 0, "kw",     "Thermal power output heat producer"),
     DatapointDef("fa_flow_setpoint",    60,254,    16, "S16", 1, "celsius", "Function automation flow setpoint"),
-    DatapointDef("fa_defrost_demand",   60,254,    22, "S16", 1, "celsius", "Function automation defrost demand / evaporator"),
+    DatapointDef("fa_heating_setpoint", 60,254,    22, "S16", 1, "celsius", "Function automation heating setpoint to WEZ"),
     DatapointDef("fa_status",           60,254,    34, "U8",  0, "status",  "Function automation status"),
 
     # Performance metrics
@@ -176,6 +176,44 @@ DEFAULT_DATAPOINTS = [
 
     # Electrical energy counter (passive, U32 multi-frame)
     DatapointDef("electrical_energy_total",10,  1, 23009, "U32", 3, "mwh",     "Total electrical energy consumed", poll=False),
+
+    # --- Datapoints added from TTE-GW-Modbus-datapoints.xlsx V2-11-12 ---
+
+    # HC1 additional sensors
+    DatapointDef("return_temp_hc1",         1,  0,     3, "S16", 1, "celsius", "Return temperature heating circuit 1"),
+    DatapointDef("pump_hc1",                1,  0,  1020, "U8",  0, "status",  "Mixing circuit pump HC1 (0=off,1=on)"),
+    DatapointDef("mixer_hc1",               1,  0,  1021, "S8",  0, "percent", "Mixer position HC1 (-100%=closed,+100%=open)"),
+
+    # DHW additional sensors
+    DatapointDef("dhw_charging_pump",       2,  0,  1066, "U8",  0, "status",  "Hot water charging pump SLP (0=off,1=on)"),
+    DatapointDef("dhw_circulation_pump",    2,  0,  1065, "U8",  0, "status",  "Hot water circulation pump (0=off,1=on)"),
+    DatapointDef("dhw_circulation_temp",    2,  0,   118, "U16", 1, "celsius", "Circulation circuit temperature"),
+
+    # Heat producer additional sensors
+    DatapointDef("water_pressure_hp",      10,  1, 20050, "S16", 1, "bar",     "Water pressure heat producer"),
+    DatapointDef("operating_hours_gt50",   10,  1,  2082, "U32", 0, "hours",   "Operating hours heat producer >50%", poll=False),
+    DatapointDef("switching_cycles_gt50",  10,  1,  2083, "U32", 0, "count",   "Switching cycles heat producer >50%", poll=False),
+    DatapointDef("cooling_power",          10,  1, 29053, "U32", 1, "kw",      "Current cooling power", poll=False),
+    DatapointDef("cooling_energy",         10,  1, 29052, "U32", 3, "mwh",     "Total cooling energy", poll=False),
+
+    # Function automation additional sensors
+    DatapointDef("fa_error_code",          60,254,    27, "U8",  0, "status",  "Error code from controller"),
+    DatapointDef("fa_wez_status",          60,254,    33, "U8",  0, "status",  "WEZ status"),
+    DatapointDef("fa_water_pressure",      60,254,    32, "S16", 1, "bar",     "Water pressure (FA)"),
+    DatapointDef("fa_cooling_setpoint",    60,254,    12, "S16", 1, "celsius", "Setpoint for cooling mode"),
+    DatapointDef("fa_switching_temp",      60,254,    19, "S16", 1, "celsius", "Switching temperature active/passive cooling"),
+    DatapointDef("fa_storage_setpoint",    60,254,    23, "S16", 1, "celsius", "Storage tank setpoint (FA to WEZ)"),
+    DatapointDef("fa_wez_setpoint",        60,254,    24, "S16", 1, "celsius", "WEZ set value"),
+
+    # Energy counters at FA level (passive, U32 multi-frame)
+    # TODO: verify these appear as multi-frame broadcasts — existing U32 counters are
+    # all fg=10/fn=1; FA-level (fg=60/fn=254) may use different arb IDs or require polling.
+    DatapointDef("thermal_energy_fa",      60,254,    47, "U32", 3, "mwh",     "Thermal energy heating (FA level)", poll=False),
+    DatapointDef("thermal_energy_dhw",     60,254,    55, "U32", 3, "mwh",     "Thermal energy DHW", poll=False),
+    DatapointDef("thermal_energy_cooling", 60,254,    51, "U32", 3, "mwh",     "Thermal energy cooling", poll=False),
+
+    # Collective fault
+    DatapointDef("collective_fault",        0,  0,  1099, "U8",  0, "status",  "Collective fault output (0=ok)"),
 ]
 
 
@@ -255,7 +293,7 @@ def decode_value(raw_bytes: bytes, dtype: str, decimal: int) -> Optional[float]:
 
     Args:
         raw_bytes: Raw payload bytes after the 6-byte header.
-        dtype: Data type string from datapoints.csv (S16, U8, U16, U32, S32, LIST).
+        dtype: Data type string from datapoints.csv (S8, S16, U8, U16, U32, S32, LIST).
         decimal: Number of decimal places (value is divided by 10^decimal).
 
     Returns:
@@ -267,6 +305,10 @@ def decode_value(raw_bytes: bytes, dtype: str, decimal: int) -> Optional[float]:
         if dtype == "S16":
             val = int.from_bytes(raw_bytes[:2], byteorder='big', signed=True)
             if val == -32768:  # 0x8000 = no sensor / invalid
+                return None
+        elif dtype == "S8":
+            val = int.from_bytes(raw_bytes[:1], byteorder='big', signed=True)
+            if val == -128:  # 0x80 = no sensor / invalid
                 return None
         elif dtype == "U8" or dtype == "LIST":
             val = raw_bytes[0]

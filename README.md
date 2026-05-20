@@ -209,8 +209,10 @@ U32 value = [data_0, data_1, data_2, data_3] big-endian
 | `hoval_outdoor_temp_af1`     | 0   | 0   | 0     | S16  | 1   | °C   | Outdoor sensor 1 (AF1)           |
 | `hoval_mixed_flow_temp_hc1`  | 1   | 0   | 0     | S16  | 1   | °C   | Mixed flow temperature HC1       |
 | `hoval_flow_temp_hc1`        | 1   | 0   | 2     | S16  | 1   | °C   | Flow temperature HC1             |
+| `hoval_return_temp_hc1`      | 1   | 0   | 3     | S16  | 1   | °C   | Return temperature HC1           |
 | `hoval_dhw_temp`              | 2   | 0   | 4     | S16  | 1   | °C   | Domestic hot water temperature   |
 | `hoval_dhw_storage_bottom`    | 2   | 0   | 6     | S16  | 1   | °C   | DHW storage bottom sensor        |
+| `hoval_dhw_circulation_temp`  | 2   | 0   | 118   | U16  | 1   | °C   | Circulation circuit temperature  |
 | `hoval_return_temp`           | 60  | 254 | 29    | S16  | 1   | °C   | Return temperature               |
 | `hoval_return_temp_hp`        | 10  | 1   | 8     | S16  | 1   | °C   | Return temperature heat producer |
 | `hoval_flow_temp_hp`          | 10  | 1   | 7     | S16  | 1   | °C   | Flow temperature heat producer   |
@@ -237,16 +239,21 @@ U32 value = [data_0, data_1, data_2, data_3] big-endian
 | `hoval_flow_setpoint_const_hc1`      | 1   | 0   | 7036  | S16  | 1   | °C   | Flow setpoint constant mode HC1   |
 | `hoval_comfort_dhw_setpoint`         | 2   | 0   | 5051  | S16  | 1   | °C   | Comfort hot water setpoint        |
 | `hoval_eco_dhw_setpoint`             | 2   | 0   | 5086  | U8   | 0   | °C   | Eco hot water setpoint            |
-| `hoval_flow_setpoint_hp`             | 10  | 1   | 1007  | S16  | 1   | °C   | Flow setpoint heat producer       |
+| `hoval_flow_setpoint_hp`             | 10  | 1   | 1007  | S16  | 0   | °C   | Flow setpoint heat producer       |
 | `hoval_fa_flow_setpoint`             | 60  | 254 | 16    | S16  | 1   | °C   | Function automation flow setpoint |
+| `hoval_fa_heating_setpoint`          | 60  | 254 | 22    | S16  | 1   | °C   | FA heating setpoint to WEZ        |
+| `hoval_fa_cooling_setpoint`          | 60  | 254 | 12    | S16  | 1   | °C   | Setpoint for cooling mode         |
+| `hoval_fa_storage_setpoint`          | 60  | 254 | 23    | S16  | 1   | °C   | Storage tank setpoint (FA to WEZ) |
+| `hoval_fa_wez_setpoint`              | 60  | 254 | 24    | S16  | 1   | °C   | WEZ set value                     |
+| `hoval_fa_switching_temp`            | 60  | 254 | 19    | S16  | 1   | °C   | Switching temp active/passive     |
 
 ### Power / Efficiency
 
 | Metric name                      | fg | fn | dp_id | Type | Dec | Unit | Description                              |
 |----------------------------------|----|----|-------|------|-----|------|------------------------------------------|
 | `hoval_modulation`               | 10 |  1 | 20052 | U8   |   0 | %    | Compressor modulation                    |
-| `hoval_hp_power_pct`             | 60 |254 |    30 | S16  |   0 | %    | Heat producer power                      |
-| `hoval_hp_power_abs_pct`         | 60 |254 |    31 | S16  |   0 | %    | Absolute power                           |
+| `hoval_hp_power_pct`             | 60 |254 |    30 | U8   |   0 | %    | Heat producer power (WEZ output)         |
+| `hoval_hp_power_abs_pct`         | 60 |254 |    31 | U8   |   0 | %    | Absolute power                           |
 | `hoval_power_limit`              | 60 |254 |     8 | S16  |   1 | %    | Power limit                              |
 | `hoval_electrical_power`         | 10 |  1 | 23002 | S16  |   2 | kW   | Electrical power input (HP internal)     |
 | `hoval_thermal_power_realtime`   | 10 |  1 | 23003 | S16  |   0 | kW   | Thermal power output (HP internal)       |
@@ -254,6 +261,17 @@ U32 value = [data_0, data_1, data_2, data_3] big-endian
 | `hoval_spf`                      | 10 |  1 | 23008 | U8   |   1 | -    | Seasonal performance factor (SPF)        |
 > **Note:** Pump speeds (`hp_pump_speed`, `main_pump_speed`), `flow_rate`, and `hp_power_setpoint`
 > were removed — they consistently return 0 on the Belaria Pro 13.
+
+### Pumps / Pressure / Mixer
+
+| Metric name                  | fg | fn | dp_id | Type | Dec | Unit | Description                      |
+|------------------------------|----|----|-------|------|-----|------|----------------------------------|
+| `hoval_pump_hc1`             | 1  |  0 |  1020 | U8   |   0 | -    | Mixing circuit pump HC1 (0/1)    |
+| `hoval_mixer_hc1`            | 1  |  0 |  1021 | S8   |   0 | %    | Mixer position HC1 (-100..+100)  |
+| `hoval_dhw_charging_pump`    | 2  |  0 |  1066 | U8   |   0 | -    | Hot water charging pump SLP      |
+| `hoval_dhw_circulation_pump` | 2  |  0 |  1065 | U8   |   0 | -    | Hot water circulation pump       |
+| `hoval_water_pressure_hp`    | 10 |  1 | 20050 | S16  |   1 | bar  | Water pressure heat producer     |
+| `hoval_fa_water_pressure`    | 60 |254 |    32 | S16  |   1 | bar  | Water pressure (FA)              |
 
 > **Note on dp 23002/23003:** dp 23002 = electrical power input (decimal=2, kW),
 > dp 23003 = thermal power output. Confirmed via TTE-GW-Modbus-datapoints.xlsx.
@@ -269,9 +287,12 @@ U32 value = [data_0, data_1, data_2, data_3] big-endian
 | `hoval_operating_mode_dhw`   | 2   | 0   | 5050  | U8   | 0   | Operating mode hot water   |
 | `hoval_operating_status_hp`  | 10  | 1   | 20051 | U8   | 0   | Heat producer status       |
 | `hoval_fa_status`            | 60  | 254 | 34    | U8   | 0   | Function automation status |
-| `hoval_fa_defrost_demand`    | 60  | 254 | 22    | S16  | 1   | Defrost demand / evaporator |
+| `hoval_hp_detail_status`     | 10  | 1   | 2053  | U8   | 0   | HP detail status (0=off,1=heating,2=cool,...) |
+| `hoval_fa_error_code`        | 60  | 254 | 27    | U8   | 0   | Error code from controller   |
+| `hoval_fa_wez_status`        | 60  | 254 | 33    | U8   | 0   | WEZ status                   |
 | `hoval_error_hc1`            | 1   | 0   | 500   | U8   | 0   | Error register HC1 (0xFF=ok) |
 | `hoval_error_dhw`            | 2   | 0   | 500   | U8   | 0   | Error register DHW (0xFF=ok) |
+| `hoval_collective_fault`     | 0   | 0   | 1099  | U8   | 0   | Collective fault output (0=ok) |
 | `hoval_control_strategy_hc1`  |  1 |  0 |  3032 | U8   |   0 | Control strategy HC1               |
 | `hoval_smartgrid_status`      |  0 |  0 | 21090 | U8   |   0 | Smart Grid status                  |
 
@@ -381,8 +402,14 @@ Binary flag: 0 = compressor off, 1 = compressor running.
 | `hoval_switching_cycles`   | 10  | 1   | 2080  | U32  | 0   | -    | Switching cycles           |
 | `hoval_thermal_power`      | 10  | 1   | 29051 | U32  | 1   | kW   | Current thermal power      |
 | `hoval_thermal_energy`     | 10  | 1   | 29050 | U32  | 3   | MWh  | Total thermal energy       |
-| `hoval_compressor_starts`  | 10  | 1   | 2053  | U8   | 0   | -    | Compressor start counter   |
+| `hoval_operating_hours_gt50`       | 10 |  1 |  2082 | U32  |   0 | h    | Operating hours >50%        |
+| `hoval_switching_cycles_gt50`      | 10 |  1 |  2083 | U32  |   0 | -    | Switching cycles >50%       |
 | `hoval_electrical_energy_total`    | 10 |  1 | 23009 | U32  |   3 | MWh  | Total electrical energy     |
+| `hoval_cooling_power`              | 10 |  1 | 29053 | U32  |   1 | kW   | Current cooling power       |
+| `hoval_cooling_energy`             | 10 |  1 | 29052 | U32  |   3 | MWh  | Total cooling energy        |
+| `hoval_thermal_energy_fa`          | 60 |254 |    47 | U32  |   3 | MWh  | Thermal energy heating (FA) |
+| `hoval_thermal_energy_dhw`         | 60 |254 |    55 | U32  |   3 | MWh  | Thermal energy DHW          |
+| `hoval_thermal_energy_cooling`     | 60 |254 |    51 | U32  |   3 | MWh  | Thermal energy cooling      |
 
 > **Note:** U32 datapoints are decoded via multi-frame transport (passive only,
 > `poll=False`). They cannot be requested with single-frame GET.

@@ -9,7 +9,7 @@ using the TopTronic E controller family — datapoint IDs may vary.
 
 ## Features
 
-- Active polling of 49 datapoints (temperatures, setpoints, status, power, COP, errors)
+- Active polling of 70+ datapoints (temperatures, setpoints, status, power, COP, errors, pressures, pumps)
 - Internal COP + SPF from heat pump (no external power meter needed)
 - Passive decoding of multi-frame U32 responses (operating hours, thermal energy)
 - Own CAN address (`msg_id=6`) to avoid collisions with the Hoval Gateway
@@ -422,8 +422,10 @@ Datapoint IDs can be found in the
 [hoval-gateway datapoints.csv](https://github.com/chrishrb/hoval-gateway/blob/main/docs/datapoints.csv).
 Filter for your device type (WEZ, Lüftung, etc.).
 
-Datapoint IDs can also be found in the
-[official Hoval TTE-GW-Modbus-datapoints.xlsx](http://www.hoval.com/misc/TTE/TTE-GW-Modbus-datapoints.xlsx).
+The authoritative datapoint reference is the
+[official Hoval TTE-GW-Modbus-datapoints.xlsx](https://www.hoval.com/medias/TTE-GW-Modbus-datapoints.xlsx?context=bWFzdGVyfHJvb3R8MTUxMzMxOTd8YXBwbGljYXRpb24vdm5kLm9wZW54bWxmb3JtYXRzLW9mZmljZWRvY3VtZW50LnNwcmVhZHNoZWV0bWwuc2hlZXR8YUdZM0wyZ3daaTh4TURJME5qY3dNVEkxTWpZek9DOVVWRVV0UjFjdFRXOWtZblZ6TFdSaGRHRndiMmx1ZEhNdWVHeHplQXxmNTI4OWRhZjk4YjU2ZGY1N2VlZGY4NmYzODQ3ZDA3MTdmOTNmZmQwOTA2OGU1ZmI3NGVmYmNkYmZkNDQ3Yjc4&attachment=true)
+(filter the "English" sheet for UnitName=WEZ, UnitId=1).
+Types and decimal places in `DEFAULT_DATAPOINTS` are verified against this xlsx (V2-11-12).
 
 > **Note on dp_id ambiguity:** Some datapoint IDs map to different metrics
 > depending on the function group context. For example, dp 22 in `Automat`
@@ -444,10 +446,10 @@ The dashboard includes:
 - **Temperature Delta & Efficiency** — flow-return delta (heat transfer indicator), realtime thermal/electrical ratio, COP and SPF trends
 - **Heat Producer Detail** — condenser, evaporator, suction gas temps + modulation
 - **Power & Efficiency** — electrical/thermal power, COP, SPF, modulation
-- **Outdoor Unit** — defrost demand with defrost-active indicator, evaporator inlet/surface temps
+- **Outdoor Unit** — FA heating setpoint, evaporator inlet/surface temps
 - **Operating Status** — status codes, operating modes (state timeline), error registers
 - **Setpoints** — all configurable setpoints in one view
-- **Counters** — operating hours, switching cycles, thermal/electrical energy, COP/SPF trends
+- **Counters** — operating hours, switching cycles, thermal/electrical energy, HP detail status, COP/SPF trends
 - **Exporter Health** — frame rates and staleness (collapsed)
 
 > **Note:** HC2/HC3/AF2 datapoints have been removed (not physically connected on single-circuit Belaria Pro 13).
@@ -583,7 +585,7 @@ sudo systemctl enable --now hoval-importer.service
 
 ## References
 
-- [Hoval TTE-GW-Modbus-datapoints.xlsx](http://www.hoval.com/misc/TTE/TTE-GW-Modbus-datapoints.xlsx) — Official Modbus datapoint reference
+- [Hoval TTE-GW-Modbus-datapoints.xlsx](https://www.hoval.com/medias/TTE-GW-Modbus-datapoints.xlsx?context=bWFzdGVyfHJvb3R8MTUxMzMxOTd8YXBwbGljYXRpb24vdm5kLm9wZW54bWxmb3JtYXRzLW9mZmljZWRvY3VtZW50LnNwcmVhZHNoZWV0bWwuc2hlZXR8YUdZM0wyZ3daaTh4TURJME5qY3dNVEkxTWpZek9DOVVWRVV0UjFjdFRXOWtZblZ6TFdSaGRHRndiMmx1ZEhNdWVHeHplQXxmNTI4OWRhZjk4YjU2ZGY1N2VlZGY4NmYzODQ3ZDA3MTdmOTNmZmQwOTA2OGU1ZmI3NGVmYmNkYmZkNDQ3Yjc4&attachment=true) — Official Modbus datapoint reference (V2-11-12)
 - [HA Community: Hoval Belaria Integration](https://community.home-assistant.io/t/hoval-belaria-integration-gateway/692870) — Status code mappings and Modbus TCP configs
 - [chrishrb/hoval-gateway](https://github.com/chrishrb/hoval-gateway) — Hoval TTE protocol reference and datapoints CSV
 - [Hoval TopTronic E documentation](https://www.hoval.com) — Controller manuals (installer access required)

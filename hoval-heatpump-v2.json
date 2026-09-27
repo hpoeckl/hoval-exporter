@@ -3176,15 +3176,95 @@
                         "color": "#3A7CA5",
                         "index": 4
                       },
+                      "5": {
+                        "text": "Forced On",
+                        "color": "#4A5568",
+                        "index": 5
+                      },
+                      "6": {
+                        "text": "Forced Reduction",
+                        "color": "#4A5568",
+                        "index": 6
+                      },
+                      "7": {
+                        "text": "Holiday",
+                        "color": "#4A5568",
+                        "index": 7
+                      },
+                      "8": {
+                        "text": "Party",
+                        "color": "#4A5568",
+                        "index": 8
+                      },
                       "9": {
                         "text": "Cooling",
                         "color": "#5794F2",
-                        "index": 5
+                        "index": 9
                       },
                       "10": {
                         "text": "Comfort Cool",
                         "color": "#00B5AD",
-                        "index": 6
+                        "index": 10
+                      },
+                      "11": {
+                        "text": "Eco Cool",
+                        "color": "#00B5AD",
+                        "index": 11
+                      },
+                      "12": {
+                        "text": "Fault",
+                        "color": "#E02F44",
+                        "index": 12
+                      },
+                      "13": {
+                        "text": "Manual",
+                        "color": "#4A5568",
+                        "index": 13
+                      },
+                      "14": {
+                        "text": "Prot. Cool",
+                        "color": "#4A5568",
+                        "index": 14
+                      },
+                      "15": {
+                        "text": "Party Cool",
+                        "color": "#4A5568",
+                        "index": 15
+                      },
+                      "16": {
+                        "text": "Dryout Heat",
+                        "color": "#4A5568",
+                        "index": 16
+                      },
+                      "17": {
+                        "text": "Dryout Stat.",
+                        "color": "#4A5568",
+                        "index": 17
+                      },
+                      "18": {
+                        "text": "Dryout Cool",
+                        "color": "#4A5568",
+                        "index": 18
+                      },
+                      "19": {
+                        "text": "Dryout Final",
+                        "color": "#4A5568",
+                        "index": 19
+                      },
+                      "22": {
+                        "text": "Cool Extern",
+                        "color": "#4A5568",
+                        "index": 20
+                      },
+                      "23": {
+                        "text": "Heat Extern",
+                        "color": "#4A5568",
+                        "index": 21
+                      },
+                      "26": {
+                        "text": "SmartGrid",
+                        "color": "#4A5568",
+                        "index": 22
                       }
                     }
                   }
@@ -3219,20 +3299,45 @@
                         "color": "#B8860B",
                         "index": 2
                       },
+                      "3": {
+                        "text": "Forced Reduction",
+                        "color": "#4A5568",
+                        "index": 3
+                      },
+                      "4": {
+                        "text": "Forced Charging",
+                        "color": "#4A5568",
+                        "index": 4
+                      },
                       "5": {
                         "text": "Fault",
-                        "color": "#C44536",
-                        "index": 3
+                        "color": "#E02F44",
+                        "index": 5
                       },
                       "6": {
                         "text": "Draw-off",
                         "color": "#5794F2",
-                        "index": 4
+                        "index": 6
+                      },
+                      "7": {
+                        "text": "Warning",
+                        "color": "#8B6914",
+                        "index": 7
                       },
                       "8": {
                         "text": "Reduced",
                         "color": "#8B6914",
-                        "index": 5
+                        "index": 8
+                      },
+                      "12": {
+                        "text": "SmartGrid",
+                        "color": "#4A5568",
+                        "index": 9
+                      },
+                      "13": {
+                        "text": "SmartGrid Forced",
+                        "color": "#4A5568",
+                        "index": 10
                       }
                     }
                   }
@@ -3263,13 +3368,13 @@
                         "index": 1
                       },
                       "2": {
-                        "text": "Cooling",
+                        "text": "Active Cooling",
                         "color": "#3A7CA5",
                         "index": 2
                       },
                       "3": {
-                        "text": "DHW+Heat",
-                        "color": "#B8860B",
+                        "text": "Lock",
+                        "color": "#8B6914",
                         "index": 3
                       },
                       "4": {
@@ -3278,19 +3383,109 @@
                         "index": 4
                       },
                       "5": {
-                        "text": "Idle",
-                        "color": "#4A5568",
+                        "text": "Frost Prot.",
+                        "color": "#00B5AD",
                         "index": 5
+                      },
+                      "6": {
+                        "text": "HP Temp Low",
+                        "color": "#8B6914",
+                        "index": 6
+                      },
+                      "7": {
+                        "text": "HP Flow High",
+                        "color": "#8B6914",
+                        "index": 7
                       },
                       "8": {
                         "text": "Defrost",
                         "color": "#FF9830",
-                        "index": 6
+                        "index": 8
+                      },
+                      "9": {
+                        "text": "Passive Cooling",
+                        "color": "#5794F2",
+                        "index": 9
+                      },
+                      "11": {
+                        "text": "HP Fault",
+                        "color": "#E02F44",
+                        "index": 10
+                      },
+                      "12": {
+                        "text": "LP Fault",
+                        "color": "#E02F44",
+                        "index": 11
+                      },
+                      "16": {
+                        "text": "Restart Delay",
+                        "color": "#4A5568",
+                        "index": 12
+                      },
+                      "17": {
+                        "text": "Gen. Block",
+                        "color": "#8B6914",
+                        "index": 13
+                      },
+                      "18": {
+                        "text": "Primary Lead",
+                        "color": "#4A5568",
+                        "index": 14
+                      },
+                      "19": {
+                        "text": "Primary Run-on",
+                        "color": "#4A5568",
+                        "index": 15
+                      },
+                      "44": {
+                        "text": "MOP",
+                        "color": "#8B6914",
+                        "index": 16
+                      },
+                      "49": {
+                        "text": "Defrost Failed",
+                        "color": "#E02F44",
+                        "index": 17
                       },
                       "51": {
-                        "text": "Pre-heat",
+                        "text": "Pump Lead",
+                        "color": "#4A5568",
+                        "index": 18
+                      },
+                      "55": {
+                        "text": "Inverter Fault",
+                        "color": "#E02F44",
+                        "index": 19
+                      },
+                      "72": {
+                        "text": "GW Frost Prot.",
+                        "color": "#8B6914",
+                        "index": 20
+                      },
+                      "73": {
+                        "text": "WQ Flow",
+                        "color": "#8B6914",
+                        "index": 21
+                      },
+                      "77": {
+                        "text": "Comp. Limit",
+                        "color": "#8B6914",
+                        "index": 22
+                      },
+                      "97": {
+                        "text": "Oil Preheat",
                         "color": "#5794F2",
-                        "index": 7
+                        "index": 23
+                      },
+                      "98": {
+                        "text": "Cold Start",
+                        "color": "#5794F2",
+                        "index": 24
+                      },
+                      "99": {
+                        "text": "Not Configured",
+                        "color": "#E02F44",
+                        "index": 25
                       }
                     }
                   }
@@ -5042,12 +5237,12 @@
                   "index": 0
                 },
                 "1": {
-                  "text": "Woche 1",
+                  "text": "Week 1",
                   "color": "#2D6A4F",
                   "index": 1
                 },
                 "2": {
-                  "text": "Woche 2",
+                  "text": "Week 2",
                   "color": "#5C8A4F",
                   "index": 2
                 },
@@ -5260,12 +5455,12 @@
                   "index": 0
                 },
                 "1": {
-                  "text": "Woche 1",
+                  "text": "Week 1",
                   "color": "#2D6A4F",
                   "index": 1
                 },
                 "2": {
-                  "text": "Woche 2",
+                  "text": "Week 2",
                   "color": "#5C8A4F",
                   "index": 2
                 },

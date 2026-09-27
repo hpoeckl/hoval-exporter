@@ -427,6 +427,10 @@ Binary flag: 0 = compressor off, 1 = compressor running.
 | `hoval_exporter_unknown_datapoints_total`        | Counter | Responses for unknown datapoints   |
 | `hoval_exporter_info`                            | Gauge   | Version, interface, interval labels |
 
+Datapoint metrics (`hoval_<name>`) are only exposed after their first decoded value.
+After an exporter restart a datapoint is absent ("No data") rather than `0` until the WEZ
+sends it, so `increase()` over the monotonic U32 counters does not count a 0 → lifetime-value jump.
+
 ## Adding datapoints
 
 Edit the `DEFAULT_DATAPOINTS` list in `hoval-exporter.py`. Each entry needs:
@@ -476,8 +480,12 @@ The dashboard includes:
 - **Outdoor Unit** — FA heating setpoint, evaporator inlet/surface temps
 - **Operating Status** — status codes, operating modes (state timeline), error registers
 - **Setpoints** — all configurable setpoints in one view
-- **Counters** — operating hours, switching cycles, thermal/electrical energy, HP detail status, COP/SPF trends
+- **Counters** — daily operating hours, switching cycles, thermal/electrical energy (kWh) as bars over the last 7 days
+  (panel-level time override, 1d min interval; bucket boundaries follow Grafana's default step alignment, i.e. UTC days),
+  HP detail status, COP/SPF trends
 - **Exporter Health** — frame rates and staleness (collapsed)
+
+Single-value stat panels without sparklines use instant queries; lifetime energy totals are shown in MWh.
 
 > **Note:** HC2/HC3/AF2 datapoints have been removed (not physically connected on single-circuit Belaria Pro 13).
 > If your system has multiple heating circuits, re-add them to `DEFAULT_DATAPOINTS`.

@@ -43,7 +43,8 @@ except ImportError:
     HAS_YAML = False
 
 import can
-from prometheus_client import Gauge, Counter, start_http_server
+from prometheus_client import Gauge, Counter, REGISTRY, start_http_server
+from prometheus_client.core import GaugeMetricFamily
 
 
 # ---------------------------------------------------------------------------
@@ -62,7 +63,7 @@ BROADCAST_ADDR = 0x0FFF  # device_type=0x0F, device_id=0xFF
 MULTIFRAME_START = 0x1F400FFF  # Start frame: [flags][seq][op][fg][fn][dp_hi][dp_lo][data_0]
 MULTIFRAME_CONT  = 0x1E800FFF  # Continuation:  [seq][data_1][data_2][data_3][crc_hi][crc_lo]
 
-VERSION = "2.0.0"
+VERSION = "2.1.1"
 
 
 # ---------------------------------------------------------------------------
@@ -372,18 +373,47 @@ def build_get_request(cfg: Config, dp: DatapointDef) -> can.Message:
 # Prometheus Metrics Registry
 # ---------------------------------------------------------------------------
 
+class DatapointCollector:
+    """Exposes datapoint gauges only after their first decoded value.
+
+    A plain prometheus_client Gauge exports 0 until set, which after an
+    exporter restart makes monotonic counters jump 0 -> lifetime value and
+    inflates increase(). Unset datapoints are omitted from the scrape instead.
+    """
+
+    def __init__(self, datapoints: list[DatapointDef]):
+        self._dps = list(datapoints)
+        self._values: dict[tuple, float] = {}
+        self._lock = threading.Lock()
+
+    def set(self, key: tuple, value: float):
+        with self._lock:
+            self._values[key] = value
+
+    def _family(self, dp: DatapointDef) -> GaugeMetricFamily:
+        help_text = f"{dp.description} [{dp.unit}]" if dp.unit else dp.description
+        return GaugeMetricFamily(f"hoval_{dp.name}", help_text)
+
+    def describe(self):
+        return [self._family(dp) for dp in self._dps]
+
+    def collect(self):
+        with self._lock:
+            values = dict(self._values)
+        for dp in self._dps:
+            if dp.key in values:
+                fam = self._family(dp)
+                fam.add_metric([], values[dp.key])
+                yield fam
+
+
 class MetricsRegistry:
     """Manages Prometheus metrics for all datapoints."""
 
     def __init__(self, datapoints: list[DatapointDef]):
-        self._gauges: dict[tuple, Gauge] = {}
-        self._dp_map: dict[tuple, DatapointDef] = {}
-
-        for dp in datapoints:
-            metric_name = f"hoval_{dp.name}"
-            help_text = f"{dp.description} [{dp.unit}]" if dp.unit else dp.description
-            self._gauges[dp.key] = Gauge(metric_name, help_text)
-            self._dp_map[dp.key] = dp
+        self._dp_map: dict[tuple, DatapointDef] = {dp.key: dp for dp in datapoints}
+        self._collector = DatapointCollector(datapoints)
+        REGISTRY.register(self._collector)
 
         # Exporter health metrics
         self.last_poll_ts    = Gauge("hoval_exporter_last_poll_timestamp_seconds",
@@ -403,11 +433,11 @@ class MetricsRegistry:
         self.up              = Gauge("hoval_exporter_up", "1 if exporter is running")
 
     def set_value(self, key: tuple, value: float):
-        if key in self._gauges:
-            self._gauges[key].set(value)
+        if key in self._dp_map:
+            self._collector.set(key, value)
 
     def has_key(self, key: tuple) -> bool:
-        return key in self._gauges
+        return key in self._dp_map
 
     def get_dp(self, key: tuple) -> Optional[DatapointDef]:
         return self._dp_map.get(key)

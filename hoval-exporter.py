@@ -63,7 +63,7 @@ BROADCAST_ADDR = 0x0FFF  # device_type=0x0F, device_id=0xFF
 MULTIFRAME_START = 0x1F400FFF  # Start frame: [flags][seq][op][fg][fn][dp_hi][dp_lo][data_0]
 MULTIFRAME_CONT  = 0x1E800FFF  # Continuation:  [seq][data_1][data_2][data_3][crc_hi][crc_lo]
 
-VERSION = "2.1.1"
+VERSION = "2.1.2"
 
 
 # ---------------------------------------------------------------------------

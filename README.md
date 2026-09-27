@@ -486,6 +486,7 @@ The dashboard includes:
 - **Exporter Health** — frame rates and staleness (collapsed)
 
 Single-value stat panels without sparklines use instant queries; lifetime energy totals are shown in MWh.
+Status value mappings (heating circuit, hot water, heat producer, control strategy, operating mode) follow the code tables in [Status codes](#heating-circuit-status-codes).
 
 > **Note:** HC2/HC3/AF2 datapoints have been removed (not physically connected on single-circuit Belaria Pro 13).
 > If your system has multiple heating circuits, re-add them to `DEFAULT_DATAPOINTS`.

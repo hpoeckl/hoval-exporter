@@ -3849,8 +3849,8 @@
     {
       "id": 33,
       "type": "state-timeline",
-      "title": "Error Registers",
-      "description": "0xFF (255) = no error",
+      "title": "Status Registers (DP 500)",
+      "description": "Datapoint 500, not an error register. 255 = idle; DHW: 0 = Legionella heat-up running, 1 = target reached (stays set). See README.",
       "datasource": {
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
@@ -3864,12 +3864,12 @@
       "targets": [
         {
           "expr": "hoval_error_hc1",
-          "legendFormat": "Error HC1",
+          "legendFormat": "HC1",
           "refId": "A"
         },
         {
           "expr": "hoval_error_dhw",
-          "legendFormat": "Error DHW",
+          "legendFormat": "DHW",
           "refId": "B"
         }
       ],
@@ -3899,7 +3899,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Error HC1"
+              "options": "HC1"
             },
             "properties": [
               {
@@ -3909,14 +3909,9 @@
                     "type": "value",
                     "options": {
                       "255": {
-                        "text": "OK",
+                        "text": "Idle",
                         "color": "#2D6A4F",
                         "index": 0
-                      },
-                      "0": {
-                        "text": "Error 0",
-                        "color": "#C44536",
-                        "index": 1
                       }
                     }
                   },
@@ -3926,9 +3921,9 @@
                       "from": 0,
                       "to": 254,
                       "result": {
-                        "text": "Error",
-                        "color": "#C44536",
-                        "index": 2
+                        "text": "Unknown",
+                        "color": "#E07A1F",
+                        "index": 3
                       }
                     }
                   }
@@ -3939,7 +3934,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Error DHW"
+              "options": "DHW"
             },
             "properties": [
               {
@@ -3949,14 +3944,19 @@
                     "type": "value",
                     "options": {
                       "255": {
-                        "text": "OK",
+                        "text": "Idle",
                         "color": "#2D6A4F",
                         "index": 0
                       },
                       "0": {
-                        "text": "Error 0",
-                        "color": "#C44536",
+                        "text": "Legionella running",
+                        "color": "#E9C46A",
                         "index": 1
+                      },
+                      "1": {
+                        "text": "Legionella reached",
+                        "color": "#4A7FB5",
+                        "index": 2
                       }
                     }
                   },
@@ -3966,9 +3966,9 @@
                       "from": 0,
                       "to": 254,
                       "result": {
-                        "text": "Error",
-                        "color": "#C44536",
-                        "index": 2
+                        "text": "Unknown",
+                        "color": "#E07A1F",
+                        "index": 3
                       }
                     }
                   }

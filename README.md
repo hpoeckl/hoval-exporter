@@ -473,7 +473,11 @@ your Prometheus/VictoriaMetrics datasource when prompted.
 The dashboard includes:
 
 - **Overview** — stat panels for temperatures, power, status, COP, SPF, energy totals, and exporter health
-- **Temperature Curves** — heating circuit and DHW temps with setpoints (dashed)
+- **Legionella** (Overview) — days since the storage tank bottom sensor last read 60 °C or more, looking back 14 days
+  (`> 14 d` beyond that). Red from 8 days, i.e. a weekly anti-Legionella heat-up was missed. It only shows on the dashboard;
+  it does not alert, and gaps in the exporter or database data count as no heat-up. Its query is a 14-day subquery;
+  on plain Prometheus with many open dashboards a recording rule for the timestamp is cheaper
+- **Temperature Curves** — heating circuit and DHW temps with setpoints (dashed); the DHW panel has a dashed grey line at 60 °C
 - **Temperature Delta & Efficiency** — flow-return delta (heat transfer indicator), realtime thermal/electrical ratio, COP and SPF trends
 - **Heat Producer Detail** — condenser, evaporator, suction gas temps + modulation
 - **Power & Efficiency** — electrical/thermal power, COP, SPF, modulation
@@ -485,7 +489,7 @@ The dashboard includes:
   HP detail status, COP/SPF trends
 - **Exporter Health** — frame rates and staleness (collapsed)
 
-Single-value stat panels without sparklines use instant queries; lifetime energy totals are shown in MWh.
+Single-value stat panels without sparklines use instant queries; lifetime energy totals are shown in MWh. Every panel has a fixed `id`, so links to a single panel (`viewPanel=panel-<id>`) survive a re-import; give a new panel the next free id.
 Status value mappings (heating circuit, hot water, heat producer, control strategy, operating mode) follow the code tables in [Status codes](#heating-circuit-status-codes).
 
 > **Note:** HC2/HC3/AF2 datapoints have been removed (not physically connected on single-circuit Belaria Pro 13).

@@ -34,6 +34,7 @@
   "links": [],
   "panels": [
     {
+      "id": 2,
       "type": "row",
       "title": "🌡️ Heat Pump Overview",
       "gridPos": {
@@ -45,6 +46,7 @@
       "collapsed": false
     },
     {
+      "id": 3,
       "type": "stat",
       "title": "Outdoor",
       "description": "",
@@ -122,6 +124,7 @@
       "transparent": true
     },
     {
+      "id": 4,
       "type": "stat",
       "title": "Room",
       "description": "",
@@ -199,6 +202,7 @@
       "transparent": true
     },
     {
+      "id": 5,
       "type": "stat",
       "title": "Flow HC1",
       "description": "",
@@ -272,6 +276,7 @@
       "transparent": true
     },
     {
+      "id": 6,
       "type": "stat",
       "title": "Return",
       "description": "",
@@ -345,6 +350,7 @@
       "transparent": true
     },
     {
+      "id": 7,
       "type": "stat",
       "title": "Hot Water",
       "description": "",
@@ -422,6 +428,83 @@
       "transparent": true
     },
     {
+      "id": 58,
+      "type": "stat",
+      "title": "Legionella",
+      "description": "Days since the storage tank bottom sensor last read 60 °C or more (looks back 14 days). The bottom is the coldest part of the tank, so 60 °C there means the whole tank was heated through, the usual criterion against Legionella. Red from 8 days: a weekly anti-Legionella heat-up was missed. Gaps in the exporter or database data count as no heat-up.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 11,
+        "y": 1
+      },
+      "targets": [
+        {
+          "expr": "min((time() - max_over_time(timestamp(hoval_dhw_storage_bottom >= 60)[14d:5m])) / 86400) or vector(15)",
+          "legendFormat": "",
+          "refId": "A",
+          "instant": true,
+          "range": false
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "suffix: d",
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#2D6A4F",
+                "value": null
+              },
+              {
+                "color": "#C44536",
+                "value": 8
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "range",
+              "options": {
+                "from": 14.5,
+                "to": null,
+                "result": {
+                  "text": "> 14 d",
+                  "index": 0
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "textMode": "value",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "transparent": true
+    },
+    {
+      "id": 8,
       "type": "stat",
       "title": "Modulation",
       "description": "",
@@ -431,8 +514,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
-        "x": 11,
+        "w": 2,
+        "x": 14,
         "y": 1
       },
       "targets": [
@@ -497,6 +580,7 @@
       "transparent": true
     },
     {
+      "id": 9,
       "type": "stat",
       "title": "Status HC1",
       "description": "0=Off 1=Heating 2=Comfort 3=Eco 4=Frost 5=ForcedOn 6=ForcedOff 7=Holiday 8=Party 9=Cooling 10=ComfortCool 11=EcoCool 12=Fault 13=Manual 14=ProtectedCool 15=PartyCool 16=DryoutHeat 22=CoolExtern 23=HeatExtern 26=SmartGrid",
@@ -507,7 +591,7 @@
       "gridPos": {
         "h": 4,
         "w": 3,
-        "x": 14,
+        "x": 16,
         "y": 1
       },
       "targets": [
@@ -662,6 +746,7 @@
       "transparent": true
     },
     {
+      "id": 10,
       "type": "stat",
       "title": "Status DHW",
       "description": "0=Off 1=Charging 2=Comfort 3=ForcedOff 4=ForcedOn 5=Fault 6=DrawOff 7=Warning 8=Reduced 12=SmartGrid 13=SGForced",
@@ -672,7 +757,7 @@
       "gridPos": {
         "h": 4,
         "w": 3,
-        "x": 17,
+        "x": 19,
         "y": 1
       },
       "targets": [
@@ -779,6 +864,7 @@
       "transparent": true
     },
     {
+      "id": 11,
       "type": "stat",
       "title": "SmartGrid",
       "description": "0=Normal, 1=Preferred, 2=Blocked, 3=Forced, 255=Inactive",
@@ -788,8 +874,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 4,
-        "x": 20,
+        "w": 2,
+        "x": 22,
         "y": 1
       },
       "targets": [
@@ -900,6 +986,7 @@
       "transparent": true
     },
     {
+      "id": 12,
       "type": "stat",
       "title": "Thermal Power",
       "description": "",
@@ -975,6 +1062,7 @@
       "transparent": true
     },
     {
+      "id": 13,
       "type": "stat",
       "title": "Thermal Energy (Lifetime)",
       "description": "",
@@ -1034,6 +1122,7 @@
       "transparent": true
     },
     {
+      "id": 14,
       "type": "stat",
       "title": "Elec. Power",
       "description": "Electrical power input (HP internal)",
@@ -1109,6 +1198,7 @@
       "transparent": true
     },
     {
+      "id": 15,
       "type": "stat",
       "title": "COP",
       "description": "Internal COP calculated by heat pump",
@@ -1184,6 +1274,7 @@
       "transparent": true
     },
     {
+      "id": 16,
       "type": "stat",
       "title": "SPF",
       "description": "Seasonal performance factor (lifetime)",
@@ -1259,6 +1350,7 @@
       "transparent": true
     },
     {
+      "id": 17,
       "type": "stat",
       "title": "Elec. Energy (Lifetime)",
       "description": "Total electrical energy consumed",
@@ -1318,6 +1410,7 @@
       "transparent": true
     },
     {
+      "id": 18,
       "type": "stat",
       "title": "Exporter",
       "description": "1=running, 0=down",
@@ -1395,6 +1488,7 @@
       "transparent": true
     },
     {
+      "id": 19,
       "type": "row",
       "title": "📈 Temperature Curves",
       "gridPos": {
@@ -1406,6 +1500,7 @@
       "collapsed": false
     },
     {
+      "id": 20,
       "type": "timeseries",
       "title": "Heating Circuit Temperatures",
       "description": "",
@@ -1688,9 +1783,10 @@
       "transparent": true
     },
     {
+      "id": 21,
       "type": "timeseries",
       "title": "Domestic Hot Water",
-      "description": "",
+      "description": "Dashed grey line: 60 °C, the temperature the whole tank (including the bottom sensor) should reach during an anti-Legionella heat-up.",
       "datasource": {
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
@@ -1747,15 +1843,20 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
-            }
+              "mode": "dashed"
+            },
+            "axisSoftMax": 62
           },
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "transparent",
                 "value": null
+              },
+              {
+                "color": "#8E8E8E",
+                "value": 60
               }
             ]
           },
@@ -1910,6 +2011,7 @@
       "transparent": true
     },
     {
+      "id": 22,
       "type": "timeseries",
       "title": "Temperature Delta (Flow − Return)",
       "description": "Supply/return temperature difference — indicates heat transfer efficiency",
@@ -2019,6 +2121,7 @@
       "transparent": true
     },
     {
+      "id": 23,
       "type": "timeseries",
       "title": "Realtime Efficiency",
       "description": "Instantaneous thermal/electrical ratio and COP trend",
@@ -2177,6 +2280,7 @@
       "transparent": true
     },
     {
+      "id": 24,
       "type": "row",
       "title": "🔥 Heat Producer Detail",
       "gridPos": {
@@ -2188,6 +2292,7 @@
       "collapsed": false
     },
     {
+      "id": 25,
       "type": "timeseries",
       "title": "Heat Producer Temperatures",
       "description": "",
@@ -2414,6 +2519,7 @@
       "transparent": true
     },
     {
+      "id": 26,
       "type": "timeseries",
       "title": "Power & Efficiency",
       "description": "",
@@ -2656,6 +2762,7 @@
       "transparent": true
     },
     {
+      "id": 27,
       "type": "row",
       "title": "🌀 Outdoor Unit",
       "gridPos": {
@@ -2667,6 +2774,7 @@
       "collapsed": false
     },
     {
+      "id": 28,
       "type": "timeseries",
       "title": "Defrost & Evaporator",
       "description": "",
@@ -2895,6 +3003,7 @@
       "transparent": true
     },
     {
+      "id": 29,
       "type": "timeseries",
       "title": "Power (kW) & COP",
       "description": "Electrical input, thermal output (realtime), U32 thermal power, and COP",
@@ -3065,6 +3174,7 @@
       "transparent": true
     },
     {
+      "id": 30,
       "type": "row",
       "title": "📊 Operating Status",
       "gridPos": {
@@ -3076,6 +3186,7 @@
       "collapsed": false
     },
     {
+      "id": 31,
       "type": "state-timeline",
       "title": "Status Codes Over Time",
       "description": "HC1: 0=Off 1=Heating 2=Comfort 3=Eco 4=Frost 12=Fault 26=SmartGrid\nDHW: 0=Off 1=Charging 8=Reduced\nHP: 0=Off 1=Heating 2=Cooling 3=Lock 4=DHW 5=Frost 8=Defrost 9=PassiveCool 51=CondPump",
@@ -3568,6 +3679,7 @@
       "transparent": true
     },
     {
+      "id": 32,
       "type": "state-timeline",
       "title": "Operating Modes",
       "description": "",
@@ -3735,6 +3847,7 @@
       "transparent": true
     },
     {
+      "id": 33,
       "type": "state-timeline",
       "title": "Error Registers",
       "description": "0xFF (255) = no error",
@@ -3882,6 +3995,7 @@
       "transparent": true
     },
     {
+      "id": 34,
       "type": "row",
       "title": "⚙️  Setpoints & Configuration",
       "gridPos": {
@@ -3893,6 +4007,7 @@
       "collapsed": false
     },
     {
+      "id": 35,
       "type": "timeseries",
       "title": "HC1 Setpoints",
       "description": "",
@@ -4045,6 +4160,7 @@
       "transparent": true
     },
     {
+      "id": 36,
       "type": "timeseries",
       "title": "DHW Setpoints",
       "description": "",
@@ -4239,6 +4355,7 @@
       "transparent": true
     },
     {
+      "id": 37,
       "type": "row",
       "title": "🔋 Counters & Lifetime",
       "gridPos": {
@@ -4250,6 +4367,7 @@
       "collapsed": false
     },
     {
+      "id": 38,
       "type": "timeseries",
       "title": "Daily Operating Hours",
       "description": "",
@@ -4345,6 +4463,7 @@
       "timeFrom": "7d"
     },
     {
+      "id": 39,
       "type": "timeseries",
       "title": "Daily Switching Cycles",
       "description": "",
@@ -4440,6 +4559,7 @@
       "timeFrom": "7d"
     },
     {
+      "id": 40,
       "type": "timeseries",
       "title": "Daily Thermal Energy",
       "description": "",
@@ -4536,6 +4656,7 @@
       "timeFrom": "7d"
     },
     {
+      "id": 41,
       "type": "timeseries",
       "title": "Daily Electrical Energy",
       "description": "Total electrical energy consumed (U32, passive)",
@@ -4632,6 +4753,7 @@
       "timeFrom": "7d"
     },
     {
+      "id": 42,
       "type": "timeseries",
       "title": "HP Detail Status",
       "description": "",
@@ -4724,6 +4846,7 @@
       "transparent": true
     },
     {
+      "id": 43,
       "type": "timeseries",
       "title": "COP & SPF Trend",
       "description": "Performance factor trends over time",
@@ -4834,6 +4957,7 @@
       "transparent": true
     },
     {
+      "id": 44,
       "type": "row",
       "title": "✏️ Writable Values (Importer)",
       "collapsed": false,
@@ -4845,6 +4969,7 @@
       }
     },
     {
+      "id": 45,
       "type": "stat",
       "title": "Strategy",
       "datasource": {
@@ -4940,6 +5065,7 @@
       "description": "0=Weather, 1=Weather+Room, 2=Room, 3=Constant, 4=Weather+Const Cool, 5=Weather+Room+Const Cool"
     },
     {
+      "id": 46,
       "type": "stat",
       "title": "Room Temp",
       "datasource": {
@@ -4999,6 +5125,7 @@
       "description": "Sensor value override (5–35 °C)"
     },
     {
+      "id": 47,
       "type": "stat",
       "title": "Comfort Room SP",
       "datasource": {
@@ -5058,6 +5185,7 @@
       "description": "Comfort room setpoint (10–30 °C)"
     },
     {
+      "id": 48,
       "type": "stat",
       "title": "Eco Room SP",
       "datasource": {
@@ -5117,6 +5245,7 @@
       "description": "Eco room setpoint (5–20 °C)"
     },
     {
+      "id": 49,
       "type": "stat",
       "title": "Cool Room SP",
       "datasource": {
@@ -5176,6 +5305,7 @@
       "description": "Cooling room setpoint (10–30 °C)"
     },
     {
+      "id": 50,
       "type": "stat",
       "title": "Mode HC1",
       "datasource": {
@@ -5276,6 +5406,7 @@
       "description": "0=Standby, 1=Woche 1, 2=Woche 2, 4=Constant, 5=Eco, 7=Manual Heat, 8=Manual Cool"
     },
     {
+      "id": 51,
       "type": "stat",
       "title": "Comfort DHW SP",
       "datasource": {
@@ -5335,6 +5466,7 @@
       "description": "Comfort hot water setpoint (10–70 °C)"
     },
     {
+      "id": 52,
       "type": "stat",
       "title": "Eco DHW SP",
       "datasource": {
@@ -5394,6 +5526,7 @@
       "description": "Eco hot water setpoint (10–70 °C)"
     },
     {
+      "id": 53,
       "type": "stat",
       "title": "Mode DHW",
       "datasource": {
@@ -5484,6 +5617,7 @@
       "description": "0=Standby, 1=Woche 1, 2=Woche 2, 4=Constant, 6=Eco"
     },
     {
+      "id": 54,
       "type": "row",
       "title": "🔧 Exporter Health",
       "gridPos": {
@@ -5495,6 +5629,7 @@
       "collapsed": true,
       "panels": [
         {
+          "id": 55,
           "type": "stat",
           "title": "Exporter",
           "description": "",
@@ -5558,6 +5693,7 @@
           "transparent": true
         },
         {
+          "id": 56,
           "type": "timeseries",
           "title": "Exporter Counters",
           "description": "",
@@ -5707,6 +5843,7 @@
           "transparent": true
         },
         {
+          "id": 57,
           "type": "timeseries",
           "title": "Last Update Timestamps",
           "description": "",
@@ -5825,6 +5962,7 @@
       ]
     },
     {
+      "id": 1,
       "datasource": {
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
@@ -5893,7 +6031,6 @@
         "x": 20,
         "y": 5
       },
-      "id": 1,
       "options": {
         "colorMode": "background",
         "graphMode": "none",

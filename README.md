@@ -290,8 +290,8 @@ U32 value = [data_0, data_1, data_2, data_3] big-endian
 | `hoval_hp_detail_status`     | 10  | 1   | 2053  | U8   | 0   | HP detail status (0=off,1=heating,2=cool,...) |
 | `hoval_fa_error_code`        | 60  | 254 | 27    | U8   | 0   | Error code from controller   |
 | `hoval_fa_wez_status`        | 60  | 254 | 33    | U8   | 0   | WEZ status                   |
-| `hoval_error_hc1`            | 1   | 0   | 500   | U8   | 0   | Error register HC1 (0xFF=ok) |
-| `hoval_error_dhw`            | 2   | 0   | 500   | U8   | 0   | Error register DHW (0xFF=ok) |
+| `hoval_error_hc1`            | 1   | 0   | 500   | U8   | 0   | Status register HC1 (255=idle) |
+| `hoval_error_dhw`            | 2   | 0   | 500   | U8   | 0   | Status register DHW (255=idle, 0=Legionella heat-up running, 1=target reached) |
 | `hoval_collective_fault`     | 0   | 0   | 1099  | U8   | 0   | Collective fault output (0=ok) |
 | `hoval_control_strategy_hc1`  |  1 |  0 |  3032 | U8   |   0 | Control strategy HC1               |
 | `hoval_smartgrid_status`      |  0 |  0 | 21090 | U8   |   0 | Smart Grid status                  |
@@ -482,7 +482,11 @@ The dashboard includes:
 - **Heat Producer Detail** — condenser, evaporator, suction gas temps + modulation
 - **Power & Efficiency** — electrical/thermal power, COP, SPF, modulation
 - **Outdoor Unit** — FA heating setpoint, evaporator inlet/surface temps
-- **Operating Status** — status codes, operating modes (state timeline), error registers
+- **Operating Status** — status codes, operating modes (state timeline), datapoint 500 status registers.
+  Despite the `hoval_error_*` metric names, datapoint 500 is not an error register: 255 is idle; on the hot water side
+  it reads 0 while the controller's Legionella heat-up runs and 1 once that heat-up has reached its target, and 1 stays set
+  after the heat-up window ends. A manual heat-up through operating mode and setpoint does not change it. Values 2-254
+  show as "Unknown" (orange). Faults are reported by `hoval_collective_fault` and `hoval_fa_error_code`
 - **Setpoints** — all configurable setpoints in one view
 - **Counters** — daily operating hours, switching cycles, thermal/electrical energy (kWh) as bars over the last 7 days
   (panel-level time override, 1d min interval; bucket boundaries follow Grafana's default step alignment, i.e. UTC days),
